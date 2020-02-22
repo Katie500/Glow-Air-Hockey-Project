@@ -34,7 +34,15 @@ public class Paddle {
 		this.colour = colour;
 	}
 	
-	public void setLocation(ArrayList<Double> location) {
-		this.location = location;
+	public void setLocation(double x, double y) {
+		if (location.size() == 0) {
+			location.add(x);
+			location.add(y);
+		}
+		
+		else {
+			location.set(0, x);
+			location.set(1,  y);
+		}
 	}
 }
