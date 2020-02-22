@@ -1,8 +1,11 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Puck {
 	private String colour;
-	private ArrayList<Double> location = new ArrayList<Double>();
+	private double velocity = 0;
+	private double direction = 0; // This is in radians, between 0 and 2pi.
+	private ArrayList<Double> location = new ArrayList<Double>(Arrays.asList(300.0, 400.0)); // Default location for the puck is the center of the screen.
 	
 	public Puck(String colour) {
 		this.colour = colour;
@@ -10,6 +13,14 @@ public class Puck {
 	
 	public String getColour() {
 		return new Puck(colour).colour;
+	}
+	
+	public double getVelocity() {
+		return new Puck(colour).velocity;
+	}
+	
+	public double getDirection() {
+		return new Puck(colour).direction;
 	}
 	
 	public ArrayList<Double> getLocation() {
@@ -22,6 +33,16 @@ public class Puck {
 	
 	public void setColour(String colour) {
 		this.colour = colour;
+	}
+	
+	public void setVelocity(double velocity) {
+		this.velocity = velocity;
+	}
+	
+	public void setDirection(double direction) {
+		if (direction >= 0 && direction <= 2*Math.PI) {
+			this.direction = direction;
+		}
 	}
 	
 	public void setLocation(double x, double y) {
