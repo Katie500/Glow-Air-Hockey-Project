@@ -67,7 +67,7 @@ public class Collision {
 		double puck_x = puck.getLocation().get(0);
 		double puck_y = puck.getLocation().get(1);
 		
-		// This is executed the left wall is being checked for a collision.
+		// This is executed if the left wall is being checked for a collision.
 		if (wall.getType() == 'l') {
 			if (puck_x - PUCK_SIZE <= left_wall) {
 					return true;
@@ -77,7 +77,7 @@ public class Collision {
 			}
 		}
 		
-		// This is executed the right wall is being checked for a collision.
+		// This is executed if the right wall is being checked for a collision.
 		else if (wall.getType() == 'r') {
 			if (puck_x + PUCK_SIZE >= right_wall) {
 					return true;
@@ -87,7 +87,7 @@ public class Collision {
 			}
 		}
 		
-		// This is executed the top wall is being checked for a collision.
+		// This is executed if the top wall is being checked for a collision.
 		else if (wall.getType() == 't') {
 			if (puck_y + PUCK_SIZE >= upper_wall) {
 					return true;
@@ -97,7 +97,7 @@ public class Collision {
 			}
 		}
 		
-		// This is executed the bottom wall is being checked for a collision.
+		// This is executed if the bottom wall is being checked for a collision.
 		else {
 			if (puck_y - PUCK_SIZE <= lower_wall) {
 					return true;
@@ -113,10 +113,6 @@ public class Collision {
 	
 	
 	public double puckBounceAngle() {
-		// The vector AB will be a line between point A: (x1, y1), the location of the paddle (the center of the circle), and point B: (x2, y2), the location of the point of impact.
-		// Consider the tangent line CD, which touches the paddle with radius r at point Z.
-		// The equation for the paddle (circle) is (x2 - x1)^2 + (y2-y1)^2 = r^2
-		ArrayList<Double> paddle_location = paddle.getLocation();
 		return 5;
 	}	
 	
@@ -139,6 +135,8 @@ public class Collision {
 			
 			// If there is a collision and if the obstacles are overlapping, the puck will be moved to the outer point of impact.
 			if (distanceToMove != 0) {
+				// NOTE: The calculation for the angle and the x, y adjustments only works if the paddle and puck hit excatly head on.
+					// I still have to make this work for instances where the puck and paddle don't hit each other head on.
 				double angle = Math.atan2(puck_y - paddle_y, puck_x - paddle_x); // This is the angle of the line between the circles.
 				double puck_x_adjustment = Math.cos(angle) * distance_between_circles;
 				double puck_y_adjustment = Math.sin(angle) * distance_between_circles;
