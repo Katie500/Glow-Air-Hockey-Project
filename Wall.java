@@ -24,3 +24,4 @@ public class Wall {
 		return new Wall(name, type, location).location;
 	}
 }
+
