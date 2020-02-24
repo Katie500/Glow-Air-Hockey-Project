@@ -4,7 +4,9 @@ public class Table {
 	final double HEIGHT = 800;
 	final double CENTER_X = WIDTH / 2;
 	final double CENTER_Y = HEIGHT / 2;
+	final double GOAL_SIZE = 75;
 	
+	private Scoreboard scoreboard = new Scoreboard(0, 0);
 	private Puck puck;
 	private Paddle player_one;
 	private Paddle player_two;
@@ -122,6 +124,23 @@ public class Table {
 		if (player_two.getY() < (CENTER_Y + player_two.PADDLE_SIZE)) {
 			player_two.setY(CENTER_Y + player_two.PADDLE_SIZE);
 			player_two.setVelocityY(-player_two.getVelocityY());
+		}
+	}
+	
+	// This function checks if either player has scored. If one has then the scoreboard is changed and the puck is reset to the center of the board.
+	public void checkForGoal() {
+		// Checking to see if player two has scored.
+		if ((puck.getX() > (CENTER_X - (GOAL_SIZE / 2) + puck.PUCK_SIZE) && (puck.getX() < (CENTER_X + (GOAL_SIZE / 2) - puck.PUCK_SIZE) )) && (puck.getY() <= puck.PUCK_SIZE)) {
+			scoreboard.playerTwoGoal();
+			puck.setX(CENTER_X);
+			puck.setY(CENTER_Y);
+		}
+		
+		// Checking to see if player one has scored.
+		if ((puck.getX() > (CENTER_X - (GOAL_SIZE / 2) + puck.PUCK_SIZE) && (puck.getX() < (CENTER_X + (GOAL_SIZE / 2) - puck.PUCK_SIZE) )) && (puck.getY() >= HEIGHT - puck.PUCK_SIZE)) {
+			scoreboard.playerOneGoal();
+			puck.setX(CENTER_X);
+			puck.setY(CENTER_Y);
 		}
 	}
 }
