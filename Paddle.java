@@ -1,9 +1,19 @@
-import java.util.ArrayList;
 
 public class Paddle {
 	private String name;
 	private String colour;
-	private ArrayList<Double> location = new ArrayList<Double>();
+
+	private double x;
+	private double y;
+	private double velocity_x = 0;
+	private double velocity_y = 0;
+	
+	final double PADDLE_SIZE = 25; // The radius of the puck.
+	final double MASS = 10;
+	final double MAX_SPEED = 50;
+	final double FRICTION_X = 0.95;
+	final double FRICTION_Y = 0.95;
+	final double ACCELERATION = 1;
 	
 	public Paddle(String name, String colour) {
 		this.name = name;
@@ -17,15 +27,23 @@ public class Paddle {
 	public String getColour() {
 		return new Paddle(name, colour).colour;
 	}
-	
-	public ArrayList<Double> getLocation() {
-		ArrayList<Double> location_copy = new ArrayList<Double>();
-		for (int i = 0; i < location.size(); i++) {
-			location.add(location.get(i));
-		}
-		return location_copy;
+
+	public double getVelocityX() {
+		return new Paddle(name, colour).velocity_x;
 	}
 	
+	public double getVelocityY() {
+		return new Paddle(name, colour).velocity_y;
+	}
+	
+	public double getX() {
+		return new Paddle(name, colour).x;
+	}
+	
+	public double getY() {
+		return new Paddle(name, colour).y;
+	}
+		
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -34,15 +52,19 @@ public class Paddle {
 		this.colour = colour;
 	}
 	
-	public void setLocation(double x, double y) {
-		if (location.size() == 0) {
-			location.add(x);
-			location.add(y);
-		}
-		
-		else {
-			location.set(0, x);
-			location.set(1,  y);
-		}
+	public void setX(double x) {
+		this.x = x;
+	}
+	
+	public void setY(double y) {
+		this.y = y;
+	}
+	
+	public void setVelocityX(double velocity_x) {
+		this.velocity_x = velocity_x;
+	}
+	
+	public void setVelocityY(double velocity_y) {
+		this.velocity_y = velocity_y;
 	}
 }
