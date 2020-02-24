@@ -134,6 +134,8 @@ public class Table {
 			scoreboard.playerTwoGoal();
 			puck.setX(CENTER_X);
 			puck.setY(CENTER_Y);
+			// Reset both players' paddles to the default position.
+
 		}
 		
 		// Checking to see if player one has scored.
@@ -141,6 +143,8 @@ public class Table {
 			scoreboard.playerOneGoal();
 			puck.setX(CENTER_X);
 			puck.setY(CENTER_Y);
+			// Reset both players' paddles to the default position.
+
 		}
 	}
 }
