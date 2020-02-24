@@ -62,7 +62,7 @@ public class Puck {
 		this.y = y;
 	}
 	
-	// This function keeps the puck inside the confines of the table and changes the puck's velocity if it collides with a wall..
+	// This function keeps the puck inside the confines of the table and changes the puck's velocity if it collides with a wall.
 	// It should be called each time the timer goes off.
 	public void keepPuckIn(Table table) {
 		// For when the puck collides with the left wall of the table.
