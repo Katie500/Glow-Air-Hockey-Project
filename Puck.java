@@ -30,7 +30,7 @@ public class Puck {
 		return new Puck(colour).velocity_x;
 	}
 	
-	public double getVelocitY() {
+	public double getVelocityY() {
 		return new Puck(colour).velocity_y;
 	}
 	
@@ -60,34 +60,6 @@ public class Puck {
 	
 	public void setY(double y) {
 		this.y = y;
-	}
-	
-	// This function keeps the puck inside the confines of the table and changes the puck's velocity if it collides with a wall.
-	// It should be called each time the timer goes off.
-	public void keepPuckIn(Table table) {
-		// For when the puck collides with the left wall of the table.
-		if (this.x > (table.getWidth() - PUCK_SIZE)) {
-			this.x = table.getWidth() - PUCK_SIZE;
-			this.velocity_x = -velocity_x;
-		}
-		
-		// For when the puck collides with the right wall of the table.
-		if (this.x < PUCK_SIZE) {
-			this.x = PUCK_SIZE;
-			this.velocity_x = -velocity_x;
-		}
-		
-		// For when the puck collides with the top wall of the table.
-		if (this.y > (table.getHeight() - PUCK_SIZE)) {
-			this.y = table.getHeight() - PUCK_SIZE;
-			this.velocity_y = -velocity_y;
-		}
-		
-		// For when the puck collides with the bottom wall of the table.
-		if (this.y < PUCK_SIZE) {
-			this.y = PUCK_SIZE;
-			this.velocity_y = -velocity_y;
-		}
 	}
 	
 	public double distance(double delta_x, double delta_y) {
