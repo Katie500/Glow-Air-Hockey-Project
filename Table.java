@@ -5,29 +5,67 @@ public class Table {
 	final double CENTER_X = WIDTH / 2;
 	final double CENTER_Y = HEIGHT / 2;
 	
+	private Puck puck;
 	private Paddle player_one;
 	private Paddle player_two;
 	
 	// Player one will play on the lower half of the table and player two will be on the top half of the table.
-	public Table(Paddle player_one, Paddle player_two) {
+	public Table(Puck puck, Paddle player_one, Paddle player_two) {
+		this.puck = puck;
 		this.player_one = player_one;
 		this.player_two = player_two;
 	}
 	
+	public Puck getPuck() {
+		return new Table(puck, player_one, player_two).puck;
+	}
+	
 	public Paddle getPlayerOne() {
-		return new Table(player_one, player_two).player_one;
+		return new Table(puck, player_one, player_two).player_one;
 	}
 	
 	public Paddle getPlayerTwo() {
-		return new Table(player_one, player_two).player_two;
+		return new Table(puck, player_one, player_two).player_two;
 	}
 
+	public void setPuck(Puck puck) {
+		this.puck = puck;
+	}
+	
 	public void setPlayerOne(Paddle paddle) {
 		player_one = paddle;
 	}
 	
 	public void setPlayerTwo(Paddle paddle) {
 		player_two = paddle;
+	}
+	
+	// This function keeps the puck inside the confines of the table and changes the puck's velocity if it collides with a wall.
+	// It should be called each time the timer goes off.
+	public void keepPuckIn() {
+		// For when the puck collides with the left wall of the table.
+		if (puck.getX() > (WIDTH - puck.PUCK_SIZE)) {
+			puck.setX(WIDTH - puck.PUCK_SIZE);
+			puck.setVelocityX(-puck.getVelocityX());
+		}
+		
+		// For when the puck collides with the right wall of the table.
+		if (puck.getX() < puck.PUCK_SIZE) {
+			puck.setX(puck.PUCK_SIZE);
+			puck.setVelocityX(-puck.getVelocityX());
+		}
+		
+		// For when the puck collides with the top wall of the table.
+		if (puck.getY() > (HEIGHT - puck.PUCK_SIZE)) {
+			puck.setY(HEIGHT - puck.PUCK_SIZE);
+			puck.setVelocityY(-puck.getVelocityY());
+		}
+		
+		// For when the puck collides with the bottom wall of the table.
+		if (puck.getY() < puck.PUCK_SIZE) {
+			puck.setY(puck.PUCK_SIZE);
+			puck.setVelocityY(-puck.getVelocityY());
+		}
 	}
 	
 	// This function keeps the paddles inside the confines of the table and changes each paddle's velocity if one collides with a wall.
