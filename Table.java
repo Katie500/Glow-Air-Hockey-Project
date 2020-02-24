@@ -5,6 +5,8 @@ public class Table {
 	final double CENTER_X = WIDTH / 2;
 	final double CENTER_Y = HEIGHT / 2;
 	final double GOAL_SIZE = 75;
+	final double PLAYER_ONE_DEFAULT_Y = HEIGHT / 4;
+	final double PLAYER_TWO_DEFAULT_Y = HEIGHT - (HEIGHT / 4);
 	
 	private Scoreboard scoreboard = new Scoreboard(0, 0);
 	private Puck puck;
@@ -134,8 +136,12 @@ public class Table {
 			scoreboard.playerTwoGoal();
 			puck.setX(CENTER_X);
 			puck.setY(CENTER_Y);
-			// Reset both players' paddles to the default position.
-
+			
+			// Resetting both players' paddles to their default positions.
+			player_one.setX(CENTER_X);
+			player_one.setY(PLAYER_ONE_DEFAULT_Y);
+			player_two.setX(CENTER_X);
+			player_two.setY(PLAYER_TWO_DEFAULT_Y);
 		}
 		
 		// Checking to see if player one has scored.
@@ -143,8 +149,12 @@ public class Table {
 			scoreboard.playerOneGoal();
 			puck.setX(CENTER_X);
 			puck.setY(CENTER_Y);
-			// Reset both players' paddles to the default position.
-
+			
+			// Resetting both players' paddles to their default positions.
+			player_one.setX(CENTER_X);
+			player_one.setY(PLAYER_ONE_DEFAULT_Y);
+			player_two.setX(CENTER_X);
+			player_two.setY(PLAYER_TWO_DEFAULT_Y);
 		}
 	}
 }
