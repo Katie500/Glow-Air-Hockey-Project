@@ -5,8 +5,8 @@ public class Paddle {
 
 	private double x;
 	private double y;
-	private double velocity_x = 100;
-	private double velocity_y = 100;
+	private double velocity_x = 0;
+	private double velocity_y = 0;
 	
 	final double PADDLE_SIZE = 25; // The radius of the puck.
 	final double MASS = 10;
@@ -20,6 +20,13 @@ public class Paddle {
 		this.colour = colour;
 	}
 	
+	public Paddle(double x, double y, double velocity_x, double velocity_y) {
+		this.x = x;
+		this.y = y;
+		this.velocity_x = velocity_x;
+		this.velocity_y = velocity_y;
+	}
+	
 	public String getName() {
 		return new Paddle(name, colour).name;
 	}
@@ -29,19 +36,19 @@ public class Paddle {
 	}
 
 	public double getVelocityX() {
-		return new Paddle(name, colour).velocity_x;
+		return new Paddle(x, y, velocity_x, velocity_y).velocity_x;
 	}
 	
 	public double getVelocityY() {
-		return new Paddle(name, colour).velocity_y;
+		return new Paddle(x, y, velocity_x, velocity_y).velocity_y;
 	}
 	
 	public double getX() {
-		return new Paddle(name, colour).x;
+		return new Paddle(x, y, velocity_x, velocity_y).x;
 	}
 	
 	public double getY() {
-		return new Paddle(name, colour).y;
+		return new Paddle(x, y, velocity_x, velocity_y).y;
 	}
 		
 	public void setName(String name) {
