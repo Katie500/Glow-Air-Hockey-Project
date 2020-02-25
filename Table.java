@@ -185,9 +185,7 @@ public class Table {
 	
 	public void updatePuckPosition(int fps) {
 		double delta_x = puck.getVelocityX() / fps;
-		System.out.println("Delta x is " + delta_x + " and the current x is " + puck.getX());
 		puck.setX(puck.getX() + delta_x);
-		System.out.println("New x should be: " + (puck.getX() + delta_x));
 		
 		double delta_y = puck.getVelocityY() / fps;
 		puck.setY(puck.getY() + delta_y);
@@ -203,8 +201,6 @@ public class Table {
 			double delta_y = paddle.getVelocityY() / fps;
 			paddle.setVelocityY(paddle.getVelocityY() + delta_y);
 		}
-//		System.out.println("Player one's new paddle position is: " + player_one.getX() + "          " + player_one.getY() + ".");
-//		System.out.println("Player two's new paddle position is: " + player_two.getX() + "          " + player_two.getY() + ".");
 	}
 	
 	public boolean gameOver() {
