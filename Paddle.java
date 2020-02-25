@@ -5,8 +5,8 @@ public class Paddle {
 
 	private double x;
 	private double y;
-	private double velocity_x = 0;
-	private double velocity_y = 0;
+	private double velocity_x = 100;
+	private double velocity_y = 100;
 	
 	final double PADDLE_SIZE = 25; // The radius of the puck.
 	final double MASS = 10;
