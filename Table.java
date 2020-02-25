@@ -3,6 +3,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.lang.Math;
 
+
+
 public class Table {
 	final double WIDTH = 600;
 	final double HEIGHT = 800;
@@ -18,22 +20,22 @@ public class Table {
 	private Paddle player_two;
 	
 	// Player one will play on the lower half of the table and player two will be on the top half of the table.
-	public Table(Puck puck, Paddle player_one, Paddle player_two) {
+	public Table(Paddle player_one, Paddle player_two, Puck puck) {
 		this.puck = puck;
 		this.player_one = player_one;
 		this.player_two = player_two;
 	}
 	
 	public Puck getPuck() {
-		return new Table(puck, player_one, player_two).puck;
+		return new Table(player_one, player_two, puck).puck;
 	}
 	
 	public Paddle getPlayerOne() {
-		return new Table(puck, player_one, player_two).player_one;
+		return new Table(player_one, player_two, puck).player_one;
 	}
 	
 	public Paddle getPlayerTwo() {
-		return new Table(puck, player_one, player_two).player_two;
+		return new Table(player_one, player_two, puck).player_two;
 	}
 
 	public void setPuck(Puck puck) {
@@ -138,29 +140,87 @@ public class Table {
 		// Checking to see if player two has scored.
 		if ((puck.getX() > (CENTER_X - (GOAL_SIZE / 2) + puck.PUCK_SIZE) && (puck.getX() < (CENTER_X + (GOAL_SIZE / 2) - puck.PUCK_SIZE) )) && (puck.getY() <= puck.PUCK_SIZE)) {
 			scoreboard.playerTwoGoal();
-			puck.setX(CENTER_X);
-			puck.setY(CENTER_Y);
+			resetPuck();
 			
 			// Resetting both players' paddles to their default positions.
-			player_one.setX(CENTER_X);
-			player_one.setY(PLAYER_ONE_DEFAULT_Y);
-			player_two.setX(CENTER_X);
-			player_two.setY(PLAYER_TWO_DEFAULT_Y);
+			resetPlayerOne();
+			resetPlayerTwo();
 		}
 		
 		// Checking to see if player one has scored.
 		if ((puck.getX() > (CENTER_X - (GOAL_SIZE / 2) + puck.PUCK_SIZE) && (puck.getX() < (CENTER_X + (GOAL_SIZE / 2) - puck.PUCK_SIZE) )) && (puck.getY() >= HEIGHT - puck.PUCK_SIZE)) {
 			scoreboard.playerOneGoal();
-			puck.setX(CENTER_X);
-			puck.setY(CENTER_Y);
+			resetPuck();
 			
 			// Resetting both players' paddles to their default positions.
-			player_one.setX(CENTER_X);
-			player_one.setY(PLAYER_ONE_DEFAULT_Y);
-			player_two.setX(CENTER_X);
-			player_two.setY(PLAYER_TWO_DEFAULT_Y);
+			resetPlayerOne();
+			resetPlayerTwo();
 		}
 	}
+	
+	public void resetPuck() {
+		puck.setX(CENTER_X);
+		puck.setY(CENTER_Y);
+	}
+	
+	public void resetPlayerOne() {
+		player_one.setX(CENTER_X);
+		player_one.setY(PLAYER_ONE_DEFAULT_Y);
+	}
+	
+	public void resetPlayerTwo() {
+		player_two.setX(CENTER_X);
+		player_two.setY(PLAYER_TWO_DEFAULT_Y);
+	}
+	
+	public void applyFriction() {
+		puck.setVelocityX(puck.getVelocityX() * puck.FRICTION_X);
+		puck.setVelocityY(puck.getVelocityY() * puck.FRICTION_Y);
+		player_one.setVelocityX(player_one.getVelocityX() * player_one.FRICTION_X);
+		player_one.setVelocityY(player_one.getVelocityY() * player_one.FRICTION_Y);
+		player_two.setVelocityX(player_two.getVelocityX() * player_two.FRICTION_X);
+		player_two.setVelocityY(player_two.getVelocityY() * player_two.FRICTION_Y);
+		
+	}
+	
+	public void updatePuckPosition(int fps) {
+		double delta_x = puck.getVelocityX() / fps;
+		System.out.println("Delta x is " + delta_x + " and the current x is " + puck.getX());
+		puck.setX(puck.getX() + delta_x);
+		System.out.println("New x should be: " + (puck.getX() + delta_x));
+		
+		double delta_y = puck.getVelocityY() / fps;
+		puck.setY(puck.getY() + delta_y);
+		System.out.println("The puck's new position is: " + puck.getX() + "          " + puck.getY() + ".");
+	}
+	
+	public void updatePaddlePositions(int fps) {
+		ArrayList<Paddle> paddles = new ArrayList<Paddle>(Arrays.asList(player_one, player_two));
+		for (int p = 0; p < 2; p++) {
+			Paddle paddle = paddles.get(p);
+			double delta_x = paddle.getVelocityX() / fps;
+			paddle.setVelocityX(paddle.getVelocityX() + delta_x);
+			double delta_y = paddle.getVelocityY() / fps;
+			paddle.setVelocityY(paddle.getVelocityY() + delta_y);
+		}
+//		System.out.println("Player one's new paddle position is: " + player_one.getX() + "          " + player_one.getY() + ".");
+//		System.out.println("Player two's new paddle position is: " + player_two.getX() + "          " + player_two.getY() + ".");
+	}
+	
+	public boolean gameOver() {
+		if (scoreboard.getPlayerOneScore() == scoreboard.SCORE_TO_WIN | scoreboard.getPlayerTwoScore() == scoreboard.SCORE_TO_WIN) {
+			if (scoreboard.getPlayerOneScore() == scoreboard.SCORE_TO_WIN) {
+				System.out.println("The game is over. " + player_one.getName() + " won the game. The final score was " + scoreboard.getPlayerOneScore() + "-" + scoreboard.getPlayerTwoScore() + ".");
+			}
+			else {
+				System.out.println("The game is over. " + player_one.getName() + " won the game. The final score was " + scoreboard.getPlayerTwoScore() + "-" + scoreboard.getPlayerOneScore() + ".");
+
+			}
+			return true;
+		}
+		return false;
+	}
+	
 	
 	
 	
@@ -172,7 +232,7 @@ public class Table {
 	}
 	
 	public ArrayList<Double> rotate(double x, double y, double sin, double cos, boolean direction) {
-		ArrayList<Double> values = new ArrayList<Double>(2);
+		ArrayList<Double> values = new ArrayList<Double>(Arrays.asList(0.0, 0.0));
 		
 		if (direction) {
 			double new_x = (x * cos) + (y * sin);
@@ -247,5 +307,5 @@ public class Table {
 			paddle.setVelocityX(reversed_paddle_velocity.get(0));
 			paddle.setVelocityY(reversed_paddle_velocity.get(1));
 		}
-	}	
+	}
 }
