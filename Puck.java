@@ -1,17 +1,17 @@
 
 public class Puck {
-	private String colour;
-	private double x;
-	private double y;
-	private double velocity_x = 100;
-	private double velocity_y = 100;
+	private String colour ; 
+	private double x ;
+	private double y ;
+	private double velocity_x = 100 ;
+	private double velocity_y = 100 ;
 	
-	final double PUCK_SIZE = 20; // The radius of the puck.
-	final double MASS = 10;
-	final double MAX_SPEED = 50;
-	final double FRICTION_X = 0.97;
-	final double FRICTION_Y = 0.97;
-	final double ACCELERATION = 1;
+	final double PUCK_SIZE = 20 ; // The radius of the puck.
+	final double MASS = 10 ;
+	final double MAX_SPEED = 50 ;
+	final double FRICTION_X = 0.97 ;
+	final double FRICTION_Y = 0.97 ;
+	final double ACCELERATION = 1 ;
 	
 	public Puck(String colour) {
 		this.colour = colour;
