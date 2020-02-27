@@ -1,9 +1,11 @@
 # Glow-Air-Hockey-Project
-This project does things.
 
-The things it does are cool.
+Our game is a computerized take on the table game air hockey.
 
-It's nice.
+To run the code for demo 1, download the zip folder of the files.
+The main game function is GlowAirHockeyApp.java
 
-
-Idk lol.
+As of now, the program will ask for player names, paddle
+colours and puck colour. The puck is given an initial velocity and
+will randomly bounce around until a player wins by reaching 7 goals
+by chance.  
