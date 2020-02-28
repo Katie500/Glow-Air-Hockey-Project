@@ -243,6 +243,7 @@ public class Table {
 	
 	// This function checks if the puck has collided with a specified paddle. If it has, it adjusts the corresponding positions and velocities.
 	// This should be called with both players' paddles each time the timer goes off.
+	// I used the website 'https://codepen.io/allanpope/pen/OVxVKj?editors=0010' to help me with the calculations in this function (including the rotate function used here).
 	public void paddleCollision(Player player) {
 		double delta_x = puck.getX() - player.getX();
 		double delta_y = puck.getY() - player.getY();
