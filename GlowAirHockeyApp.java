@@ -1,29 +1,35 @@
 
 import java.util.Scanner;
 
-public class GlowAirHockeyApp {
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+import javafx.util.Duration;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
+
+public class GlowAirHockeyApp extends Application {
 	private Table table;
 	
-	final static int FPS = 20;
-	
-	// Create a new table.
-	public GlowAirHockeyApp(String player_one_name, String player_one_colour, String player_two_name, String player_two_colour, String puck_colour) {
-		Player player_one = new Player(player_one_name, player_one_colour);
-		Player player_two = new Player(player_two_name, player_two_colour);
-		Puck puck = new Puck(puck_colour);
-		table = new Table(player_one, player_two, puck);
-		
-		// Setting the puck and paddles to their starting positions.
-		table.resetPuck();
-		table.resetPlayerOne();
-		table.resetPlayerTwo();
-	}
+	final static int DELAY = 10;
 	
 	public static void main(String[] args) {
-		// NOTE: For this text-based demo of the game, the puck move at a constant velocity and both players' paddles will remain stationary.
-			// The puck will continue moving until a player is scored on. Then it will reset to the center of the table and continue moving.
-			// This will continue until one of the players has won the game.
+		Application.launch(args);
 		
+	}
+	
+	 public void start(Stage primaryStage) throws Exception {		
 		Scanner scanner = new Scanner(System.in);
 		
 		// The following takes input from the user, which is then used to create a new game.
@@ -47,86 +53,123 @@ public class GlowAirHockeyApp {
 		String puck_colour = scanner.nextLine();
 		
 		scanner.close();
+
+		// Creating a new table.
+		table = new Table(new Player(player_one_name, player_one_colour), new Player(player_two_name, player_two_colour), new Puck(puck_colour));
 		
-		// Creating a new game based on the user's input.
-		GlowAirHockeyApp air_hockey = new GlowAirHockeyApp(player_one_name, player_one_colour, player_two_name, player_two_colour, puck_colour);
+		// Setting the puck and paddles to their starting positions.
+		table.resetPuck();
+		table.resetPlayerOne();
+		table.resetPlayerTwo();
 		
-		// This creates a delay between each time the game is updated and rendered so we can see a real-time representation of the movement of the puck.
-		try {
-			while (! air_hockey.table.gameOver()) {
-				air_hockey.updateGame();
-				air_hockey.renderGame();
-				Thread.sleep(1000/FPS);
-			}
-		}
+		Pane root = new Pane();
+		root.setPrefSize(table.WIDTH, table.HEIGHT);
+		root.setStyle("-fx-background-color: BLACK;");
 		
-		catch (InterruptedException e) {
-		}
+		// Timeline to call the event handler every 10ms to update the table.
+		Timeline timeline = new Timeline(
+	        new KeyFrame(Duration.millis(DELAY),
+	        		
+	               new EventHandler <ActionEvent>() {
+	        	
+	        			@Override
+	        			public void handle(ActionEvent event) {
+	        				updateGame();
+	        			}
+				   }
+	        )
+		);
+		timeline.setCycleCount(Timeline.INDEFINITE);
+		timeline.setAutoReverse(true);
+		timeline.play();
 		
-	}
+		Circle center_circle = new Circle();
+		center_circle.setRadius(80);
+		center_circle.setFill(Color.RED);
+		center_circle.setCenterX(table.CENTER_X);
+		center_circle.setCenterY(table.CENTER_Y);
+		
+		Circle center_circle_cover = new Circle();
+		center_circle_cover.setRadius(75);
+		center_circle_cover.setFill(Color.BLACK);
+		center_circle_cover.setCenterX(table.CENTER_X);
+		center_circle_cover.setCenterY(table.CENTER_Y);
+		
+		Circle center = new Circle();
+		center.setRadius(5);
+		center.setFill(Color.RED);
+		center.setCenterX(table.CENTER_X);
+		center.setCenterY(table.CENTER_Y);
+		
+		Rectangle left_border = new Rectangle();
+		left_border.setX(0);
+		left_border.setY(0);
+		left_border.setHeight(table.HEIGHT);
+		left_border.setWidth(10);
+		left_border.setFill(Color.DARKRED);
+		
+		Rectangle right_border = new Rectangle();
+		right_border.setX(table.WIDTH - 10);
+		right_border.setY(0);
+		right_border.setHeight(800);
+		right_border.setWidth(10);
+		right_border.setFill(Color.DARKRED);
+		
+		Rectangle top_border = new Rectangle();
+		top_border.setX(0);
+		top_border.setY(table.HEIGHT - 10);
+		top_border.setHeight(10);
+		top_border.setWidth(table.WIDTH);
+		top_border.setFill(Color.DARKRED);
+		
+		Rectangle bottom_border = new Rectangle();
+		bottom_border.setX(0);
+		bottom_border.setY(0);
+		bottom_border.setHeight(10);
+		bottom_border.setWidth(table.WIDTH);
+		bottom_border.setFill(Color.DARKRED);
+		
+		Rectangle center_line = new Rectangle();
+		center_line.setX(0);
+		center_line.setY(table.CENTER_Y + -3);
+		center_line.setHeight(6);
+		center_line.setWidth(table.WIDTH);
+		center_line.setFill(Color.RED);
+		
+		Rectangle player_one_goal = new Rectangle();
+		player_one_goal.setX(table.CENTER_X - table.GOAL_SIZE / 2);
+		player_one_goal.setY(0);
+		player_one_goal.setHeight(10);
+		player_one_goal.setWidth(table.GOAL_SIZE);
+		player_one_goal.setFill(Color.CHARTREUSE);
+		
+		Rectangle player_two_goal = new Rectangle();
+		player_two_goal.setX(table.CENTER_X - table.GOAL_SIZE / 2);
+		player_two_goal.setY(table.HEIGHT - 10);
+		player_two_goal.setHeight(10);
+		player_two_goal.setWidth(table.GOAL_SIZE);
+		player_two_goal.setFill(Color.CHARTREUSE);
+		
+		root.getChildren().addAll(center_line, left_border, right_border, top_border, bottom_border, player_one_goal, player_two_goal, center_circle, center_circle_cover, center);
+		root.getChildren().add(table.getPuck());
+		root.getChildren().add(table.getPlayerOne());
+		root.getChildren().add(table.getPlayerTwo());
+		
+		primaryStage.setScene(new Scene(root));
+		primaryStage.setResizable(false);
+		primaryStage.setTitle("Glow Air Hockey");
+		primaryStage.show();
+	   }
 	
-	// This function updates what is necessary with each tick (or frame, if you're thinking in terms of fps).
+	// This function updates what is necessary with each tick in the timeline.
 	public void updateGame() {
-		table.updatePuckPosition(FPS);
+//		table.applyFriction(DELAY);
+		table.updatePuckPosition(DELAY);
+		table.updatePaddlePositions(DELAY);
 		table.checkForGoal();
+		table.paddleCollision(table.getPlayerOne(), DELAY);
+		table.paddleCollision(table.getPlayerTwo(), DELAY);
 		table.keepPuckIn();
-		table.updatePaddlePositions(FPS);
 		table.keepPaddlesIn();
-		table.paddleCollision(table.getPlayerOne());
-		table.paddleCollision(table.getPlayerTwo());
-//		table.applyFriction(); // Friction is turned off for this demo since only the puck is moving, and we need to keep moving until it finds its way into a goal.
-	}
-	
-	// This function creates a text-based rendering of the game.
-	// There are no player controls in this demo due to the limitations of a text-based animation game.
-	// However, it effectively shows how the puck (and paddles, though for this demo they are stationary) will move and how it will bounce after a collision.
-	public void renderGame() {
-		char[][] board = new char[32][24];
-		
-		// Separating each rendering of the board.
-		for (int i = 0; i < 2; i++) {
-			System.out.println("");
-		}
-		
-		// Filling the board with empty spaces.
-		for (int y = 0; y < 32; y++) {
-			for (int x = 0; x < 24; x++) {
-				board[y][x] = '-';
-			}
-		}
-		
-		// Creating goal posts. They will be represented by the character '#'.
-		int goal_x1 = (int) ((table.CENTER_X - (table.GOAL_SIZE / 2)) / 25);
-		int goal_x2 = (int) ((table.CENTER_X + (table.GOAL_SIZE / 2)) / 25);
-		board[0][goal_x1] = '#';
-		board[0][goal_x2] = '#';
-		board[31][goal_x1] = '#';
-		board[31][goal_x2] = '#';
-		
-		
-		// Assigning puck location. It will be represented by the character '0'.
-		int puck_x = (int) (table.getPuck().getX() / 25);
-		int puck_y = (int) (table.getPuck().getY() / 25);
-		board[puck_y][puck_x] = '0';
-		
-		// Assigning player one's location. It will be represented by the character '1'.
-		int player_one_x = (int) (table.getPlayerOne().getX() / 25);
-		int player_one_y = (int) (table.getPlayerOne().getY() / 25);
-		board[player_one_y][player_one_x] = '1';
-				
-		// Assigning player two's location. It will be represented by the character '2'.
-		int player_two_x = (int) (table.getPlayerTwo().getX() / 25);
-		int player_two_y = (int) (table.getPlayerTwo().getY() / 25);
-		board[player_two_y][player_two_x] = '2';
-		
-		// Printing the table.
-		for (int y = 31; y >= 0; y--) {
-			System.out.println("");
-			for (int x = 0; x < 24; x++) {
-				System.out.print(" " + board[y][x] + " ");
-			}
-		}
-		
-		System.out.println("");
 	}
 }
