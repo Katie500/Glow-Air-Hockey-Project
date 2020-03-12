@@ -79,10 +79,10 @@ public class Puck extends Circle {
 	
 	// Setter for the puck's y velocity.
 	public void setVelocityY(double velocity) {
-		if(velocity_x <= MAX_SPEED)
-			this.velocity_x = velocity ;
+		if(velocity_y <= MAX_SPEED)
+			this.velocity_y = velocity ;
 		else
-			this.velocity_x = MAX_SPEED ;
+			this.velocity_y = MAX_SPEED ;
 	}
 	
 	// Setter for the puck's x position.
