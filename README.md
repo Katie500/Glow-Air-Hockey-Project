@@ -9,3 +9,5 @@ As of now, the program will ask for player names, paddle
 colours and puck colour. The puck is given an initial velocity and
 will randomly bounce around until a player wins by reaching 7 goals
 by chance.  
+
+We currently have a working GUI implimented using JavaFX, but mouse and key controls are yet to be implimented.
