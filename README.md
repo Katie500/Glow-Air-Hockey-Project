@@ -2,7 +2,7 @@
 
 Our game is a computerized take on the table game air hockey.
 
-To run the code for demo 1, download the zip folder of the files.
+To run the code for Demo 2, download the zip folder of the files.
 The main game function is GlowAirHockeyApp.java
 
 As of now, the program will ask for player names, paddle
