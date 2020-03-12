@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.Group ;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
@@ -61,7 +62,7 @@ public class GlowAirHockeyApp extends Application {
 		table.resetPuck();
 		table.resetPlayerOne();
 		table.resetPlayerTwo();
-		
+		Group g = new Group();
 		Pane root = new Pane();
 		root.setPrefSize(table.WIDTH, table.HEIGHT);
 		root.setStyle("-fx-background-color: BLACK;");
@@ -78,7 +79,7 @@ public class GlowAirHockeyApp extends Application {
 	        			}
 				   }
 	        )
-		);
+		) ;
 		timeline.setCycleCount(Timeline.INDEFINITE);
 		timeline.setAutoReverse(true);
 		timeline.play();
@@ -135,21 +136,22 @@ public class GlowAirHockeyApp extends Application {
 		center_line.setHeight(6);
 		center_line.setWidth(table.WIDTH);
 		center_line.setFill(Color.RED);
-		
+
 		Rectangle player_one_goal = new Rectangle();
 		player_one_goal.setX(table.CENTER_X - table.GOAL_SIZE / 2);
 		player_one_goal.setY(0);
 		player_one_goal.setHeight(10);
 		player_one_goal.setWidth(table.GOAL_SIZE);
 		player_one_goal.setFill(Color.CHARTREUSE);
-		
+
 		Rectangle player_two_goal = new Rectangle();
 		player_two_goal.setX(table.CENTER_X - table.GOAL_SIZE / 2);
 		player_two_goal.setY(table.HEIGHT - 10);
 		player_two_goal.setHeight(10);
 		player_two_goal.setWidth(table.GOAL_SIZE);
 		player_two_goal.setFill(Color.CHARTREUSE);
-		
+
+
 		root.getChildren().addAll(center_line, left_border, right_border, top_border, bottom_border, player_one_goal, player_two_goal, center_circle, center_circle_cover, center);
 		root.getChildren().add(table.getPuck());
 		root.getChildren().add(table.getPlayerOne());
@@ -160,10 +162,10 @@ public class GlowAirHockeyApp extends Application {
 		primaryStage.setTitle("Glow Air Hockey");
 		primaryStage.show();
 	   }
-	
+
 	// This function updates what is necessary with each tick in the timeline.
 	public void updateGame() {
-//		table.applyFriction(DELAY);
+		table.applyFriction(DELAY);
 		table.updatePuckPosition(DELAY);
 		table.updatePaddlePositions(DELAY);
 		table.checkForGoal();
