@@ -89,11 +89,14 @@ public class Puck extends Circle {
 	public void setX(double x) {
 		this.x = x;
 		setCenterX(x);
+		System.out.println("x: " +x) ;
+
 	}
 	
 	// Setter for the puck's y position.
 	public void setY(double y) {
 		this.y = y;
 		setCenterY(y);
+		System.out.println("y :" + y);
 	}
 }
