@@ -1,123 +1,299 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.lang.Math;
 import javafx.scene.shape.Circle;
 import javafx.scene.paint.Color;
 
-public class Player extends Circle {
-	private String name;
-	private String colour;
-	private double x;
-	private double y;
-	private double velocity_x = 1000;
-	private double velocity_y = 0;
-	private int score = 0;
+public class Table {
+	final double WIDTH = 600;
+	final double HEIGHT = 800;
+	final double CENTER_X = WIDTH / 2;
+	final double CENTER_Y = HEIGHT / 2;
+	final double GOAL_SIZE = 100;
+	final double PLAYER_ONE_DEFAULT_Y = HEIGHT / 4;
+	final double PLAYER_TWO_DEFAULT_Y = HEIGHT - (HEIGHT / 4);
+	final double SCORE_TO_WIN = 7;
 
-	final double SIZE = 25; // The radius of the puck.
-	final double MASS = 10;
-	final double MAX_VELOCITY = 1000;
-	final double ACCELERATION = 2;
-	final int SCORE_TO_WIN = 7;
-	final double FRICTION = 1;
+	private Puck puck;
+	private Player player_one;
+	private Player player_two;
 
-	// Constructor used to create a player.
-	public Player(String name, String colour) {
-		setName(name);
-		setColour(colour);
-		setRadius(SIZE);
-		setFill(Color.valueOf(colour));
+	// Player one will play on the lower half of the table and player two will be on the top half of the table.
+	public Table(Player player_one, Player player_two, Puck puck) {
+		this.puck = puck;
+		this.player_one = player_one;
+		this.player_two = player_two;
 	}
 
-	// Constructor used exclusively by some getter methods to eliminate privacy leaks and retain the values needed.
-	public Player(Player player) {
-		this.name = player.name;
-		this.colour = player.colour;
-		this.x = player.x;
-		this.y = player.y;
-		this.velocity_x = player.velocity_x;
-		this.velocity_y = player.velocity_y;
-		this.score = player.score;
+	// Getter for the puck.
+	public Puck getPuck() {
+		return new Table(player_one, player_two, puck).puck;
 	}
 
-	// Getter for player name.
-	public String getName() {
-		return new Player(this).name;
+	// Getter for player one.
+	public Player getPlayerOne() {
+		return new Table(player_one, player_two, puck).player_one;
 	}
 
-	// Getter for player colour.
-	public String getColour() {
-		return new Player(this).colour;
+	// Getter for player two.
+	public Player getPlayerTwo() {
+		return new Table(player_one, player_two, puck).player_two;
 	}
 
-	// Getter for player's x velocity.
-	public double getVelocityX() {
-		return new Player(this).velocity_x;
+	// This function keeps the puck inside the confines of the table and changes the puck's velocity if it collides with a wall.
+	// It should be called each time the timer goes off.
+	public void keepPuckIn() {
+		// For when the puck collides with the left wall of the table.
+		if (puck.getX() > (WIDTH - puck.SIZE)) {
+			puck.setX(WIDTH - puck.SIZE);
+			puck.setVelocityX(-puck.getVelocityX());
+		}
+
+		// For when the puck collides with the right wall of the table.
+		if (puck.getX() < puck.SIZE) {
+			puck.setX(puck.SIZE);
+			puck.setVelocityX(-puck.getVelocityX());
+		}
+
+		// For when the puck collides with the top wall of the table.
+		if (puck.getY() > (HEIGHT - puck.SIZE)) {
+			puck.setY(HEIGHT - puck.SIZE);
+			puck.setVelocityY(-puck.getVelocityY());
+		}
+
+		// For when the puck collides with the bottom wall of the table.
+		if (puck.getY() < puck.SIZE) {
+			puck.setY(puck.SIZE);
+			puck.setVelocityY(-puck.getVelocityY());
+		}
 	}
 
-	// Getter for player's y velocity.
-	public double getVelocityY() {
-		return new Player(this).velocity_y;
+	// This function keeps the paddles inside the confines of the table and changes each paddle's velocity if one collides with a wall.
+	// It should be called each time the timer goes off.
+	// Because there are two paddles it was easier to put this function in 'Table' instead of 'Paddle'.
+	public void keepPaddlesIn() {
+		// CHECKING PLAYER ONE
+
+		// For when player one's paddle collides with the right wall of the table.
+		if (player_one.getX() > (WIDTH - player_one.SIZE)) {
+			player_one.setX(WIDTH - player_one.SIZE);
+			player_one.setVelocityX(-player_one.getVelocityX());
+		}
+
+		// For when player one's paddle collides with the left wall of the table.
+		if (player_one.getX() < player_one.SIZE) {
+			player_one.setX(player_one.SIZE);
+			player_one.setVelocityX(-player_one.getVelocityX());
+		}
+
+		// For when player one's paddle collides with the bottom wall of the table.
+		if (player_one.getY() < player_one.SIZE) {
+			player_one.setY(player_one.SIZE);
+			player_one.setVelocityY(-player_one.getVelocityY());
+		}
+
+		// For when player one's paddle attempts to go over the center line.
+		if (player_one.getY() > (CENTER_Y - player_one.SIZE)) {
+			player_one.setY(CENTER_Y - player_one.SIZE);
+			player_one.setVelocityY(-player_one.getVelocityY());
+		}
+
+		// CHECKING PLAYER TWO
+
+		// For when player two's paddle collides with the right wall of the table.
+		if (player_two.getX() > (WIDTH - player_two.SIZE)) {
+			player_two.setX(WIDTH - player_two.SIZE);
+			player_two.setVelocityX(-player_two.getVelocityX());
+		}
+
+		// For when player two's paddle collides with the left wall of the table.
+		if (player_two.getX() < player_two.SIZE) {
+			player_two.setX(player_two.SIZE);
+			player_two.setVelocityX(-player_two.getVelocityX());
+		}
+
+		// For when player two's paddle collides with the top wall of the table.
+		if (player_two.getY() > HEIGHT - player_two.SIZE) {
+			player_two.setY(HEIGHT - player_two.SIZE);
+			player_two.setVelocityY(-player_two.getVelocityY());
+		}
+
+		// For when player two's paddle attempts to go over the center line.
+		if (player_two.getY() < (CENTER_Y + player_two.SIZE)) {
+			player_two.setY(CENTER_Y + player_two.SIZE);
+			player_two.setVelocityY(-player_two.getVelocityY());
+		}
 	}
 
-	// Getter for player's x position.
-	public double getX() {
-		return new Player(this).x;
+	// This function checks if either player has scored. If one has then the score of the corresponding player is changed and the puck and paddles are reset to the center of the table.
+	public void checkForGoal() {
+		// Checking to see if player two has scored.
+		if ((puck.getX() > (CENTER_X - (GOAL_SIZE / 2) + puck.SIZE) && (puck.getX() < (CENTER_X + (GOAL_SIZE / 2) - puck.SIZE))) && (puck.getY() <= puck.SIZE)) {
+			player_two.goal();
+			resetPuck();
+
+			// Resetting both players' paddles to their default positions.
+			resetPlayerOne();
+			resetPlayerTwo();
+		}
+
+		// Checking to see if player one has scored.
+		if ((puck.getX() > (CENTER_X - (GOAL_SIZE / 2) + puck.SIZE) && (puck.getX() < (CENTER_X + (GOAL_SIZE / 2) - puck.SIZE) )) && (puck.getY() >= HEIGHT - puck.SIZE)) {
+			player_one.goal();
+			resetPuck();
+
+			// Resetting both players' paddles to their default positions.
+			resetPlayerOne();
+			resetPlayerTwo();
+		}
 	}
 
-	// Getter for player's y position.
-	public double getY() {
-		return new Player(this).y;
+	// Resets the puck to the center of the table.
+	public void resetPuck() {
+		puck.setX(CENTER_X);
+		puck.setY(CENTER_Y);
 	}
 
-	// Getter for the player's score.
-	public int getScore() {
-		return new Player(this).score;
+	// Resets player one's paddle to it's starting position.
+	public void resetPlayerOne() {
+		player_one.setX(CENTER_X);
+		player_one.setY(PLAYER_ONE_DEFAULT_Y);
 	}
 
-	// Setter for player's name.
-	public void setName(String name) {
-		this.name = name;
+	// Resets player two's paddle to it's starting position.
+	public void resetPlayerTwo() {
+		player_two.setX(CENTER_X);
+		player_two.setY(PLAYER_TWO_DEFAULT_Y);
 	}
 
-	// Setter for player's colour.
-	public void setColour(String colour) {
-		this.colour = colour;
+	// Applies friction to the puck so its velocity slowly degrades over time.
+	public void applyFriction(int delay) {
+		puck.setVelocityX(puck.getVelocityX() * puck.FRICTION);
+		puck.setVelocityY(puck.getVelocityY() * puck.FRICTION);
+		player_one.setVelocityX(player_one.getVelocityX() * player_one.FRICTION);
+		player_one.setVelocityY(player_one.getVelocityY() * player_one.FRICTION);
+		player_two.setVelocityX(player_two.getVelocityX() * player_two.FRICTION);
+		player_two.setVelocityY(player_two.getVelocityY() * player_two.FRICTION);
 	}
 
-	// Setter for player's x position.
-	public void setX(double x) {
-		this.x = x;
-		setCenterX(x);
+	// Updates the position of the puck based on the delay between each frame.
+	public void updatePuckPosition(int delay) {
+		double delta_x = puck.getVelocityX() * delay / 1000;
+		puck.setX(puck.getX() + delta_x);
+
+		double delta_y = puck.getVelocityY() * delay / 1000;
+		puck.setY(puck.getY() + delta_y);
 	}
 
-	// Setter for player's y position.
-	public void setY(double y) {
-		this.y = y;
-		setCenterY(y);
+	// Updates the position of each player's paddle with each frame.
+	public void updatePaddlePositions(int delay) {
+		ArrayList<Player> paddles = new ArrayList<Player>(Arrays.asList(player_one, player_two));
+		for (int p = 0; p < 2; p++) {
+			Player paddle = paddles.get(p);
+			double delta_x = paddle.getVelocityX() * delay / 1000;
+			paddle.setX(paddle.getX() + delta_x);
+			double delta_y = paddle.getVelocityY() * delay / 1000;
+			paddle.setY(paddle.getY() + delta_y);
+		}
 	}
 
-	// Setter for player's x velocity.
-	public void setVelocityX(double velocity) {
-		if (velocity_x <= 1000) {
-			this.velocity_x = velocity;
+	// This function checks if the game is over. If a player has won the game it returns true and prints a game over message.
+	public boolean gameOver() {
+		if (player_one.getScore() == SCORE_TO_WIN | player_two.getScore() == SCORE_TO_WIN) {
+			if (player_one.getScore() == SCORE_TO_WIN) {
+				System.out.println("The game is over. " + player_one.getName() + " won the game. The final score was " + player_one.getScore() + "-" + player_two.getScore() + ".");
+			}
+			else {
+				System.out.println("The game is over. " + player_one.getName() + " won the game. The final score was " + player_two.getScore() + "-" + player_one.getScore() + ".");
+
+			}
+			return true;
+		}
+		return false;
+	}
+
+	// This function is a distance calculator used in the puck-paddle collision calculations.
+	public double distance(double delta_x, double delta_y) {
+		return Math.sqrt((delta_x)*(delta_x) + (delta_y)*(delta_y));
+	}
+
+	// This function is an angle calculator used in the puck-paddle collision calculations.
+	public ArrayList<Double> rotate(double x, double y, double sin, double cos, boolean reverse) {
+		ArrayList<Double> values = new ArrayList<Double>(Arrays.asList(0.0, 0.0));
+
+		if (reverse) {
+			double new_x = (x * cos) + (y * sin);
+			double new_y = (y * cos) - (x * sin);
+			values.set(0, new_x);
+			values.set(1, new_y);
 		}
 
 		else {
-			this.velocity_x = 1000;
+			double new_x = (x * cos) - (y * sin);
+			double new_y = (y * cos) + (x * sin);
+			values.set(0,  new_x);
+			values.set(1,  new_y);
 		}
+
+		return values;
 	}
 
-	// Setter for player's y velocity.
-	public void setVelocityY(double velocity_y) {
-		if (velocity_x <= 1000) {
-			this.velocity_y = velocity_y;
-		}
+	// This function checks if the puck has collided with a specified paddle. If it has, it adjusts the corresponding positions and velocities.
+	// This should be called with both players' paddles each time the timer goes off.
+	// I used the website 'https://codepen.io/allanpope/pen/OVxVKj?editors=0010' to help me with the calculations in this function (including the rotate function used here).
+	public void paddleCollision(Player player, int delay) {
+		double delta_x = puck.getX() - player.getX();
+		double delta_y = puck.getY() - player.getY();
+		double distance = distance(delta_x, delta_y);
+		double sum_of_radii = puck.SIZE + player.SIZE;
 
-		else {
-			this.velocity_y = 1000;
-		}
-	}
+		// If the distance between the pucks is less than the sum of their radii, then a collision has occurred.
+		if (distance < sum_of_radii) {
+			double angle = Math.atan2(delta_y,  delta_x);
+			double sin = Math.sin(angle);
+			double cos = Math.cos(angle);
 
-	// Updates the player's score, prints a message, and pauses the game for five seconds if the player scores.
-	public void goal() {
-		score += 1;
-		System.out.println(name + " has scored!");
+			// Rotate paddle's position.
+			ArrayList<Double> rotated_paddle_position = new ArrayList<Double>(Arrays.asList(0.0, 0.0));
+
+			// Rotate puck's position.
+			ArrayList<Double> rotated_puck_position = rotate(delta_x, delta_y, sin, cos, true);
+
+			// Rotate paddle's velocity.
+			ArrayList<Double> rotated_paddle_velocity = rotate(player.getVelocityX(), player.getVelocityY(), sin, cos, true);
+
+			// Rotate Puck's velocity.
+			ArrayList<Double> rotated_puck_velocity = rotate(puck.getVelocityX(), puck.getVelocityY(), sin, cos, true);
+
+			// In each of the above array lists, the first entry is the x value and the second is the y value. We can use those to adjust the velocities.
+			double net_velocity_x =  rotated_paddle_velocity.get(0) - rotated_puck_velocity.get(0);
+			double new_paddle_velocity_x = (rotated_paddle_velocity.get(0) * (player.MASS - puck.MASS) + 2 * puck.MASS + rotated_puck_velocity.get(0)) / (player.MASS + puck.MASS);
+			rotated_puck_velocity.set(0, net_velocity_x + new_paddle_velocity_x);
+
+			// Adjusting positions in case there is any overlap.
+			double absolute_v = Math.abs(rotated_paddle_velocity.get(0)) + Math.abs(rotated_puck_velocity.get(0));
+			double overlap = player.SIZE + puck.SIZE - Math.abs(rotated_paddle_position.get(0) - rotated_puck_position.get(0));
+
+			rotated_paddle_position.set(0, rotated_paddle_position.get(0) + (rotated_paddle_velocity.get(0) / absolute_v * overlap));
+			rotated_puck_position.set(0, rotated_puck_position.get(0) + (rotated_puck_velocity.get(0) / absolute_v * overlap));
+
+			// Rotate the positions and velocities back.
+			ArrayList<Double> reversed_paddle_position = rotate(rotated_paddle_position.get(0), rotated_paddle_position.get(1), sin, cos, false);
+			ArrayList<Double> reversed_puck_position = rotate(rotated_puck_position.get(0), rotated_puck_position.get(1), sin, cos, false);
+			ArrayList<Double> reversed_paddle_velocity = rotate(rotated_paddle_velocity.get(0), rotated_paddle_velocity.get(1), sin, cos, false);
+			ArrayList<Double> reversed_puck_velocity = rotate(rotated_puck_velocity.get(0), rotated_puck_velocity.get(1), sin, cos, false);
+
+			// Adjusting the screen positions.
+//			puck.setX(player.getX() + reversed_puck_position.get(0));
+//			puck.setY(player.getY() + reversed_puck_position.get(1));
+//			player.setX(player.getX() + reversed_paddle_position.get(0));
+//			player.setY(player.getY() + reversed_paddle_position.get(1));
+
+			// Adjusting the screen velocities.
+			puck.setVelocityX(reversed_puck_velocity.get(0));
+			puck.setVelocityY(reversed_puck_velocity.get(1));
+			player.setVelocityX(reversed_paddle_velocity.get(0));
+			player.setVelocityY(reversed_paddle_velocity.get(1));
+		}
 	}
 }
