@@ -9,4 +9,4 @@ There is a working JUnit test for the Puck class. Run using JUnit 4.
 
 As of now, the puck is given an initial velocity and will randomly bounce around until a player wins by reaching 7 goals by chance.
 Friction, and puck collisions with the edges of the game board are working however collisions with the paddles are still a work in progress. 
-We currently have a working GUI implimented using JavaFX which uses a timer to update positions of the puck and paddles, but paddle controls are yet to be implimented.
+We currently have a working GUI using JavaFX which uses a timer to update positions of the puck and paddles, but paddle controls are yet to be implemented.
