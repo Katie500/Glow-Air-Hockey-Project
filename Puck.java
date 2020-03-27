@@ -6,8 +6,8 @@ import javafx.scene.paint.Color;
 public class Puck extends Circle {
 	private double x;
 	private double y;
-	private double velocity_x = 500;
-	private double velocity_y = 500;
+	private double velocity_x = 0;
+	private double velocity_y = 0;
 	
 	final double SIZE = 20; // The radius of the puck.
 	final double MASS = 10;
