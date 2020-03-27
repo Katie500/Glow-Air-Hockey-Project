@@ -1,4 +1,6 @@
 
+package application;
+
 import java.util.Scanner;
 
 import javafx.animation.KeyFrame;
@@ -85,49 +87,49 @@ public class Main extends Application {
 				switch (e.getCode()) {
 					case UP: {
 						up = false;
-						table.getPlayerOne().setVelocityY(table.getPlayerOne().getVelocityY() * 0.5);
+						table.getPlayerOne().setVelocityY(table.getPlayerOne().getVelocityY() * 0.3);
 					}
 					break;
 					
 					case DOWN: {
 						down = false;
-						table.getPlayerOne().setVelocityY(table.getPlayerOne().getVelocityY() * 0.5);
+						table.getPlayerOne().setVelocityY(table.getPlayerOne().getVelocityY() * 0.3);
 					}
 					break;
 					
 					case LEFT: {
 						left = false;
-						table.getPlayerOne().setVelocityX(table.getPlayerOne().getVelocityX() * 0.5);
+						table.getPlayerOne().setVelocityX(table.getPlayerOne().getVelocityX() * 0.3);
 					}
 					break;
 					
 					case RIGHT: {
 						right = false;
-						table.getPlayerOne().setVelocityX(table.getPlayerOne().getVelocityX() * 0.5);
+						table.getPlayerOne().setVelocityX(table.getPlayerOne().getVelocityX() * 0.3);
 					}
 					break;
 					
 					case W: {
 						w = false;
-						table.getPlayerTwo().setVelocityY(table.getPlayerTwo().getVelocityY() * 0.5);
+						table.getPlayerTwo().setVelocityY(table.getPlayerTwo().getVelocityY() * 0.3);
 					}
 					break;
 					
 					case S: {
 						s = false;
-						table.getPlayerTwo().setVelocityY(table.getPlayerTwo().getVelocityY() * 0.5);
+						table.getPlayerTwo().setVelocityY(table.getPlayerTwo().getVelocityY() * 0.3);
 					}
 					break;
 					
 					case A: {
 						a = false;
-						table.getPlayerTwo().setVelocityX(table.getPlayerTwo().getVelocityX() * 0.5);
+						table.getPlayerTwo().setVelocityX(table.getPlayerTwo().getVelocityX() * 0.3);
 					}
 					break;
 					
 					case D: {
 						d = false;
-						table.getPlayerTwo().setVelocityX(table.getPlayerTwo().getVelocityX() * 0.5);
+						table.getPlayerTwo().setVelocityX(table.getPlayerTwo().getVelocityX() * 0.3);
 					}
 					break;
 					
