@@ -1,24 +1,34 @@
 
+package application;
+
 import java.util.Scanner;
+
 import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class Main extends Application {
 	private Table table;
 	private boolean up, down, left, right, w, a, s, d = false;
-	Timeline timeline;
+	private Timeline timeline;
+	private Pane layout = new Pane();
+	private Label p1_score = new Label();
+	private Label p2_score = new Label();
+	private DropShadow goal_border_glow = new DropShadow();
 	
 	final static int DELAY = 10;
 	final static int BASE_VELOCITY = 30;
@@ -30,25 +40,36 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		createTable();
+		createScores();
 		
 		primaryStage.setTitle("Glow Air Hockey");
-		
-		Pane layout = new Pane();
+
 		layout.setPrefSize(600, 800);
 		layout.getChildren(); // Add things using this.
 		layout.setStyle("-fx-background-color: BLACK;");
-		createBackground(layout);
+		createBackground();
 		
 		// Timeline to call the event handler every 10ms to update the table.
 		timeline = new Timeline(new KeyFrame(Duration.millis(DELAY), new EventHandler <ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-	        	updateGame();
+        		removeScore();
+	        	boolean goal = updateGame();
 	        	controllerOne();
 	        	controllerTwo();
 	        	
 	        	if (table.gameOver()) {
 					timeline.stop();
+					gameOverScreen();
+					displayScore();
+	        	}
+	        	
+	        	else if (goal) {
+	        		displayScore();
+	        		PauseTransition pause = new PauseTransition(Duration.seconds(2));
+	        		pause.setOnFinished(e -> timeline.play());
+	        		timeline.pause();
+	        		pause.play();
 				}
 	        }
 		}));
@@ -60,19 +81,23 @@ public class Main extends Application {
 		layout.getChildren().addAll(table.getPuck(), table.getPlayerOne(), table.getPlayerTwo(), table.getPlayerOne().getCenterCircle(), table.getPlayerTwo().getCenterCircle());
 		Scene scene = new Scene(layout);
 		
+		primaryStage.setScene(scene);
+		primaryStage.setResizable(false);
+		primaryStage.show();
+		
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent e) {				
 				switch (e.getCode()) {
-					case UP: up = true; break;
-					case DOWN: down = true; break;
-					case LEFT: left = true; break;
-					case RIGHT: right = true; break;
-					case W: w = true; break;
-					case S: s = true; break;
-					case A: a = true; break;
-					case D: d = true; break;
-					default: break;
+				case UP: up = true; break;
+				case DOWN: down = true; break;
+				case LEFT: left = true; break;
+				case RIGHT: right = true; break;
+				case W: w = true; break;
+				case S: s = true; break;
+				case A: a = true; break;
+				case D: d = true; break;
+				default: break;
 				}
 			}
 		});
@@ -81,62 +106,58 @@ public class Main extends Application {
 			@Override
 			public void handle(KeyEvent e) {
 				switch (e.getCode()) {
-					case UP: {
-						up = false;
-						table.getPlayerOne().setVelocityY(table.getPlayerOne().getVelocityY() * 0.3);
-					}
-					break;
-					
-					case DOWN: {
-						down = false;
-						table.getPlayerOne().setVelocityY(table.getPlayerOne().getVelocityY() * 0.3);
-					}
-					break;
-					
-					case LEFT: {
-						left = false;
-						table.getPlayerOne().setVelocityX(table.getPlayerOne().getVelocityX() * 0.3);
-					}
-					break;
-					
-					case RIGHT: {
-						right = false;
-						table.getPlayerOne().setVelocityX(table.getPlayerOne().getVelocityX() * 0.3);
-					}
-					break;
-					
-					case W: {
-						w = false;
-						table.getPlayerTwo().setVelocityY(table.getPlayerTwo().getVelocityY() * 0.3);
-					}
-					break;
-					
-					case S: {
-						s = false;
-						table.getPlayerTwo().setVelocityY(table.getPlayerTwo().getVelocityY() * 0.3);
-					}
-					break;
-					
-					case A: {
-						a = false;
-						table.getPlayerTwo().setVelocityX(table.getPlayerTwo().getVelocityX() * 0.3);
-					}
-					break;
-					
-					case D: {
-						d = false;
-						table.getPlayerTwo().setVelocityX(table.getPlayerTwo().getVelocityX() * 0.3);
-					}
-					break;
-					
-					default: break;
+				case UP: {
+					up = false;
+					table.getPlayerOne().setVelocityY(table.getPlayerOne().getVelocityY() * 0.3);
+				}
+				break;
+				
+				case DOWN: {
+					down = false;
+					table.getPlayerOne().setVelocityY(table.getPlayerOne().getVelocityY() * 0.3);
+				}
+				break;
+				
+				case LEFT: {
+					left = false;
+					table.getPlayerOne().setVelocityX(table.getPlayerOne().getVelocityX() * 0.3);
+				}
+				break;
+				
+				case RIGHT: {
+					right = false;
+					table.getPlayerOne().setVelocityX(table.getPlayerOne().getVelocityX() * 0.3);
+				}
+				break;
+				
+				case W: {
+					w = false;
+					table.getPlayerTwo().setVelocityY(table.getPlayerTwo().getVelocityY() * 0.3);
+				}
+				break;
+				
+				case S: {
+					s = false;
+					table.getPlayerTwo().setVelocityY(table.getPlayerTwo().getVelocityY() * 0.3);
+				}
+				break;
+				
+				case A: {
+					a = false;
+					table.getPlayerTwo().setVelocityX(table.getPlayerTwo().getVelocityX() * 0.3);
+				}
+				break;
+				
+				case D: {
+					d = false;
+					table.getPlayerTwo().setVelocityX(table.getPlayerTwo().getVelocityX() * 0.3);
+				}
+				break;
+				
+				default: break;
 				}
 			}
 		});
-		
-		primaryStage.setScene(scene);
-		primaryStage.setResizable(false);
-		primaryStage.show();
 	}
 	
 	public void createTable() {
@@ -200,18 +221,19 @@ public class Main extends Application {
 	}
 	
 	// This function updates what is necessary with each tick in the timeline.
-	public void updateGame() {
+	public boolean updateGame() {
 		table.applyFriction(DELAY);
 		table.getPuck().updatePuckPosition(DELAY);
 		table.updatePaddlePositions(DELAY);
-		table.checkForGoal();
+		boolean goal = table.checkForGoal();
 		table.paddleCollision(table.getPlayerOne());
 		table.paddleCollision(table.getPlayerTwo());
 		table.getPuck().keepPuckIn(table.WIDTH, table.HEIGHT);
 		table.keepPaddlesIn();
+		return goal;
 	}
 	
-	public void createBackground(Pane layout) {
+	public void createBackground() {
 		DropShadow border_glow = new DropShadow();
 		border_glow.setColor(Color.RED);
 		border_glow.setOffsetX(0f);
@@ -219,7 +241,6 @@ public class Main extends Application {
 		border_glow.setWidth(50);
 		border_glow.setHeight(50);
 		
-		DropShadow goal_border_glow = new DropShadow();
 		goal_border_glow.setColor(Color.CHARTREUSE);
 		goal_border_glow.setOffsetX(0f);
 		goal_border_glow.setOffsetY(0f);
@@ -303,6 +324,70 @@ public class Main extends Application {
 		player_two_goal.setEffect(goal_border_glow);
 		
 		layout.getChildren().addAll(center_line, left_border, right_border, top_border, bottom_border, player_one_goal, player_two_goal, center_circle, center_circle_cover, center);
+	}
+	
+	public void createScores() {
+		int font_size = 60;
+		Font font = new Font(Font.getDefault().getStyle(), font_size);
+		
+		p1_score.setText(Integer.toString(table.getPlayerOne().getScore()));
+		p1_score.setLayoutX(table.CENTER_X - (font_size / 3.5));
+		p1_score.setLayoutY((table.PLAYER_ONE_DEFAULT_Y / 2) - (font_size / 2));
+		p1_score.setTextFill(table.getPlayerOne().getColour());
+		p1_score.setEffect(table.getPlayerOne().getBorderGlow());
+
+		p2_score.setText(Integer.toString(table.getPlayerTwo().getScore()));
+		p2_score.setLayoutX(table.CENTER_X - (font_size / 3.5));
+		p2_score.setLayoutY(table.HEIGHT - (table.PLAYER_ONE_DEFAULT_Y / 1) + font_size);
+		p2_score.setTextFill(table.getPlayerTwo().getColour());
+		p2_score.setEffect(table.getPlayerTwo().getBorderGlow());
+		
+		for (String f: Font.getFontNames()) {
+			if (f.equals("Bauhaus 93")) {
+				font = new Font(f, font_size * 1.3);
+				p1_score.setLayoutX(p1_score.getLayoutX() - 5);
+				p2_score.setLayoutX(p2_score.getLayoutX() - 5);
+			}
+		}
+		
+		p1_score.setFont(font);
+		p2_score.setFont(font);
+	}
+	
+	public void displayScore() {	
+		p1_score.setText(Integer.toString(table.getPlayerOne().getScore()));
+		p2_score.setText(Integer.toString(table.getPlayerTwo().getScore()));
+		layout.getChildren().addAll(p1_score, p2_score);
+	}
+	
+	public void removeScore() {
+		layout.getChildren().removeAll(p1_score, p2_score);
+	}
+	
+	public Font getFont() {
+		int font_size = 60;
+		Font font = new Font(Font.getDefault().getStyle(), font_size);
+		
+		for (String f: Font.getFontNames()) {
+			if (f.equals("Bauhaus 93")) {
+				font = new Font(f, font_size * 1.3);
+				p1_score.setLayoutX(p1_score.getLayoutX() - 5);
+				p2_score.setLayoutX(p2_score.getLayoutX() - 5);
+			}
+		}
+		
+		return font;
+	}
+	
+	public void gameOverScreen() {
+		Label game_over = new Label();
+		game_over.setText("Game Over");
+		game_over.setFont(getFont());
+		game_over.setLayoutX(table.CENTER_X - 180);
+		game_over.setLayoutY(table.CENTER_Y - 45);
+		game_over.setTextFill(Color.CHARTREUSE);
+		game_over.setEffect(goal_border_glow);
+		layout.getChildren().add(game_over);
 	}
 	
 	public void controllerOne() {
