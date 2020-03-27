@@ -11,7 +11,7 @@ public class Puck extends Circle {
 	
 	final double SIZE = 20; // The radius of the puck.
 	final double MASS = 10;
-	final double MAX_VELOCITY = 1000;
+	final double MAX_VELOCITY = 1500;
 	final double FRICTION = 0.997;
 	
 	// Constructor used to create a puck.
