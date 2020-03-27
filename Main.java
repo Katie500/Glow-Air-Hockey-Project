@@ -1,6 +1,4 @@
 
-package application;
-
 import java.util.Scanner;
 
 import javafx.animation.KeyFrame;
