@@ -1,8 +1,5 @@
 
-package application;
-
 import java.util.Scanner;
-
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -21,6 +18,7 @@ import javafx.util.Duration;
 public class Main extends Application {
 	private Table table;
 	private boolean up, down, left, right, w, a, s, d = false;
+	Timeline timeline;
 	
 	final static int DELAY = 10;
 	final static int BASE_VELOCITY = 30;
@@ -42,20 +40,18 @@ public class Main extends Application {
 		createBackground(layout);
 		
 		// Timeline to call the event handler every 10ms to update the table.
-		Timeline timeline = new Timeline(
-	        new KeyFrame(Duration.millis(DELAY),
-	        		
-	               new EventHandler <ActionEvent>() {
+		timeline = new Timeline(new KeyFrame(Duration.millis(DELAY), new EventHandler <ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+	        	updateGame();
+	        	controllerOne();
+	        	controllerTwo();
 	        	
-	        			@Override
-	        			public void handle(ActionEvent event) {
-	        				updateGame();
-	        				controllerOne();
-	        				controllerTwo();
-	        			}
-				   }
-	        )
-		);
+	        	if (table.gameOver()) {
+					timeline.stop();
+				}
+	        }
+		}));
 		
 		timeline.setCycleCount(Timeline.INDEFINITE);
 		timeline.setAutoReverse(true);
