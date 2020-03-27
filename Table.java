@@ -95,26 +95,48 @@ public class Table {
 	}
 	
 	// This function checks if either player has scored. If one has then the score of the corresponding player is changed and the puck and paddles are reset to the center of the table.
-	public void checkForGoal() {
+	public boolean checkForGoal() {
 		// Checking to see if player two has scored.
 		if ((puck.getX() > (CENTER_X - (GOAL_SIZE / 2) + puck.SIZE) && (puck.getX() < (CENTER_X + (GOAL_SIZE / 2) - puck.SIZE))) && (puck.getY() <= puck.SIZE)) {
 			player_two.goal();
-			resetPuck();
 			
 			// Resetting both players' paddles to their default positions.
+			resetPuck();
 			resetPlayerOne();
 			resetPlayerTwo();
+			
+			// Resetting velocities to 0.
+			resetVelocities();
+			
+			return true;
 		}
 		
 		// Checking to see if player one has scored.
 		if ((puck.getX() > (CENTER_X - (GOAL_SIZE / 2) + puck.SIZE) && (puck.getX() < (CENTER_X + (GOAL_SIZE / 2) - puck.SIZE) )) && (puck.getY() >= HEIGHT - puck.SIZE)) {
 			player_one.goal();
-			resetPuck();
 			
-			// Resetting both players' paddles to their default positions.
+			// Resetting positions.
+			resetPuck();
 			resetPlayerOne();
 			resetPlayerTwo();
+			
+			// Resetting velocities.
+			resetVelocities();
+			
+			return true;
 		}
+		
+		return false;
+	}
+	
+	// Sets velocities of both paddles and the puck to 0.
+	public void resetVelocities() {
+		puck.setVelocityX(0);
+		puck.setVelocityY(0);
+		player_one.setVelocityX(0);
+		player_one.setVelocityY(0);
+		player_two.setVelocityX(0);
+		player_two.setVelocityY(0);
 	}
 	
 	// Resets the puck to the center of the table.
