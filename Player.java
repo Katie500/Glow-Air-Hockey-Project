@@ -12,11 +12,12 @@ public class Player extends Circle {
 	private double velocity_y = 0;
 	private int score = 0;
 	private Circle paddle_center = new Circle();
+	private DropShadow border_glow = new DropShadow();
 	
 	final double SIZE = 28; // The radius of the puck.
 	final double MASS = 10;
 	final double MAX_VELOCITY = 1000;
-	final double ACCELERATION = 150;
+	final double ACCELERATION = 200;
 	final int SCORE_TO_WIN = 7;
 	final double FRICTION = 1;
 	
@@ -37,6 +38,7 @@ public class Player extends Circle {
 		this.velocity_x = player.velocity_x;
 		this.velocity_y = player.velocity_y;
 		this.score = player.score;
+		this.border_glow = player.border_glow;
 	}
 	
 	// Getter for player name.
@@ -69,6 +71,19 @@ public class Player extends Circle {
 		return new Player(this).score;
 	}
 	
+	public Circle getCenterCircle() {
+		return paddle_center;
+	}
+	
+	public Color getColour() {
+		return colour;
+	}
+	
+	// Getter for the player's border glow.
+	public DropShadow getBorderGlow() {
+		return new Player(this).border_glow;
+	}
+	
 	// Setter for player's name.
 	public void setName(String name) {
 		this.name = name;
@@ -76,16 +91,21 @@ public class Player extends Circle {
 	
 	// Setter for player's colour.
 	public void setColour(Color colour) {
-		setFill(colour.deriveColor(1.0,  0.8,  1.0,  5.0));
-		DropShadow border_glow = new DropShadow();
+		this.colour = colour.deriveColor(1.0,  0.8,  1.0,  5.0);
+		setFill(colour);
+		setBorderGlow();
+		setEffect(border_glow);
+		paddle_center.setEffect(border_glow);
+	}
+	
+	// Setting the player's border glow.
+	public void setBorderGlow() {
 		border_glow.setColor(colour);
 		border_glow.setOffsetX(0f);
 		border_glow.setOffsetY(0f);
 		border_glow.setWidth(50);
 		border_glow.setHeight(50);
 		border_glow.setRadius(SIZE + 15);
-		setEffect(border_glow);
-		paddle_center.setEffect(border_glow);
 	}
 	
 	// Setter for player's x position.
@@ -136,9 +156,5 @@ public class Player extends Circle {
 	public void goal() {
 		score += 1;
 		System.out.println(name + " has scored!");
-	}
-	
-	public Circle getCenterCircle() {
-		return paddle_center;
 	}
 }
