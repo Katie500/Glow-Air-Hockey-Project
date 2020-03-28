@@ -1,4 +1,4 @@
-The changes to main are including a state function to hava a menu state and a playing state. lines 44-50, if statement @87,138,227,253.
+The changes to main are including a state function to hava a menu state and a playing state. lines 44-50, if statements @87,138,227,253.
 I moved some things to InputHandler to create a little bit of inheritance. 
 
 The MainMenu class is just a panel with buttons that should start the game, show play instructions, and quit the game.  It doesn't ask for player input and such as I was going to make a sub-menu to choose colours etc. but got stuck. 
