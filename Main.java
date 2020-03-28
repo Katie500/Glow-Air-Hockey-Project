@@ -1,5 +1,7 @@
 
 import java.util.Scanner;
+
+
 import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
@@ -19,8 +21,15 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class Main extends Application {
-	private Table table;
-	private boolean up, down, left, right, w, a, s, d = false;
+	protected static Table table;
+	protected static boolean up;
+    protected static boolean down;
+    protected static boolean left;
+    protected static boolean right;
+    protected static boolean w;
+    protected static boolean a;
+    protected static boolean s;
+    protected static boolean d = false;
 	private Timeline timeline;
 	private Pane layout = new Pane();
 	private Label p1_score = new Label();
@@ -29,6 +38,22 @@ public class Main extends Application {
 	private boolean paused = false;
 	private Label paused_label = new Label();
 	private Label game_over_label = new Label();
+	
+	
+	
+	private MainMenu menu;
+
+	protected static enum STATE{
+	    MENU,
+	    GAME
+        };
+    public static STATE state = STATE.MENU;
+
+	
+	
+	
+	
+	
 	
 	final static int DELAY = 10;
 	final static int BASE_VELOCITY = 30;
@@ -41,6 +66,10 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		createTable();
 		createLabels();
+		
+		
+		menu = new MainMenu();
+//		this.addMouseListener(new MouseInput());
 		
 		primaryStage.setTitle("Glow Air Hockey");
 
@@ -55,7 +84,7 @@ public class Main extends Application {
 			public void handle(ActionEvent event) {
 				boolean goal = false;
         		removeScore();
-        		
+        		if (state == STATE.GAME) {
         		if (paused) {
         			if (!layout.getChildren().contains(paused_label)) {
         				layout.getChildren().add(paused_label);
@@ -67,8 +96,8 @@ public class Main extends Application {
         				layout.getChildren().remove(paused_label);
         			}
         			goal = updateGame();
-	        		controllerOne();
-	        		controllerTwo();
+	        		InputHandler.controllerOne();
+	        		InputHandler.controllerTwo();
 	        		
 	        		if (table.gameOver()) {
 						timeline.stop();
@@ -85,7 +114,11 @@ public class Main extends Application {
 					}
         		}
 	        }
+			
+		}
+			
 		}));
+		
 		
 		timeline.setCycleCount(Timeline.INDEFINITE);
 		timeline.setAutoReverse(true);
@@ -101,7 +134,10 @@ public class Main extends Application {
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent e) {				
-				switch (e.getCode()) {
+				
+			    if (state == STATE.GAME) {
+			    
+			    switch (e.getCode()) {
 				case UP: up = true; break;
 				case DOWN: down = true; break;
 				case LEFT: left = true; break;
@@ -113,6 +149,9 @@ public class Main extends Application {
 				default: break;
 				}
 			}
+			    
+			}
+			    
 		});
 		
 		scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
@@ -184,7 +223,10 @@ public class Main extends Application {
 	}
 	
 	public void createTable() {
-		Scanner input = new Scanner(System.in);
+		
+	    if (state == STATE.GAME) {
+	    
+	    Scanner input = new Scanner(System.in);
 		
 		// The following takes input for each player's username, which is then used to create a new game.
 		System.out.print("Enter a username for player one: ");
@@ -208,6 +250,11 @@ public class Main extends Application {
 		
 		input.close();
 	}
+	    else if (state == STATE.MENU) {
+	        
+	    }
+	}
+	    
 	
 	// This takes a string input from the user and tries to use it to set player one's colour.
 	// An invalid colour will cause an exception, which will be caught, causing the function to be called again asking for a new colour.
@@ -245,7 +292,8 @@ public class Main extends Application {
 	
 	// This function updates what is necessary with each tick in the timeline.
 	public boolean updateGame() {
-		table.applyFriction(DELAY);
+		
+	    table.applyFriction(DELAY);
 		table.getPuck().updatePuckPosition(DELAY);
 		table.updatePaddlePositions(DELAY);
 		boolean goal = table.checkForGoal();
@@ -254,6 +302,7 @@ public class Main extends Application {
 		table.getPuck().keepPuckIn(table.WIDTH, table.HEIGHT);
 		table.keepPaddlesIn();
 		return goal;
+		
 	}
 	
 	public void createBackground() {
@@ -416,53 +465,5 @@ public class Main extends Application {
 		return font;
 	}
 		
-	public void controllerOne() {
-		double vx = table.getPlayerOne().getVelocityX();
-		double vy = table.getPlayerOne().getVelocityY();
-		double acceleration = table.getPlayerOne().ACCELERATION;
-		
-		if (up) {
-			vy -= acceleration;
-		}
-		
-		if (down) {
-			vy += acceleration;
-		}
-		
-		if (left) {
-			vx -= acceleration;
-		}
-		
-		if (right) {
-			vx += acceleration;
-		}
-		
-		table.getPlayerOne().setVelocityX(vx);
-		table.getPlayerOne().setVelocityY(vy);
-	}
 	
-	public void controllerTwo() {
-		double vx = table.getPlayerTwo().getVelocityX();
-		double vy = table.getPlayerTwo().getVelocityY();
-		double acceleration = table.getPlayerTwo().ACCELERATION;
-		
-		if (w) {
-			vy -= acceleration;
-		}
-		
-		if (s) {
-			vy += acceleration;
-		}
-		
-		if (a) {
-			vx -= acceleration;
-		}
-		
-		if (d) {
-			vx += acceleration;
-		}
-		
-		table.getPlayerTwo().setVelocityX(vx);
-		table.getPlayerTwo().setVelocityY(vy);
-	}
 }
