@@ -1,3 +1,36 @@
+The changes to main are including a state function to hava a menu state and a playing state. lines 44-50, if statement @87,138,227,253.
+I moved some things to InputHandler to create a little bit of inheritance. 
+
+The MainMenu class is just a panel with buttons that should start the game, show play instructions, and quit the game.  It doesn't ask for player input and such as I was going to make a sub-menu to choose colours etc. but got stuck. 
+This video is how I got the idea for states based menus   https://www.youtube.com/watch?v=FZWX5WoGW00
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Glow-Air-Hockey-Project
 
 Our game is a computerized take on the table game air hockey.
