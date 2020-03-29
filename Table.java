@@ -1,3 +1,4 @@
+package application;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,7 +9,7 @@ public class Table {
 	final double HEIGHT = 800;
 	final double CENTER_X = WIDTH / 2;
 	final double CENTER_Y = HEIGHT / 2;
-	final double GOAL_SIZE = 125;
+	final double GOAL_SIZE = 150;
 	final double PLAYER_ONE_DEFAULT_Y = HEIGHT / 4;
 	final double PLAYER_TWO_DEFAULT_Y = HEIGHT - (HEIGHT / 4);
 	final double SCORE_TO_WIN = 7;
