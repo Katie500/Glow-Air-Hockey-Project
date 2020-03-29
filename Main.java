@@ -1,4 +1,6 @@
 
+package application;
+
 import java.util.Scanner;
 import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
@@ -234,6 +236,10 @@ public class Main extends Application {
 		String colour = scanner.nextLine();
 		
 		try {
+			if (colour.toUpperCase().equals("BLACK")) {
+				throw new Exception();
+			}
+			
 			table.getPlayerTwo().setColour(Color.valueOf(colour));
 		}
 		
