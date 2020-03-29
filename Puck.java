@@ -1,3 +1,4 @@
+package application;
 
 import javafx.scene.shape.Circle;
 import javafx.scene.effect.DropShadow;
@@ -13,13 +14,14 @@ public class Puck extends Circle {
 	final double MASS = 10;
 	final double MAX_VELOCITY = 1500;
 	final double FRICTION = 0.997;
+	final Color COLOUR = Color.RED;
 	
 	// Constructor used to create a puck.
 	public Puck() {
 		setRadius(SIZE);
-		setFill(Color.RED.deriveColor(1.0,  0.8,  1.0,  5.0));
+		setFill(COLOUR.deriveColor(1.0,  0.8,  1.0,  5.0));
 		DropShadow border_glow = new DropShadow();
-		border_glow.setColor(Color.RED);
+		border_glow.setColor(COLOUR);
 		border_glow.setOffsetX(0f);
 		border_glow.setOffsetY(0f);
 		border_glow.setWidth(50);
