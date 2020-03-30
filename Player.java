@@ -16,7 +16,7 @@ public class Player extends Circle {
 	private DropShadow border_glow = new DropShadow();
 	
 	final double SIZE = 28; // The radius of the puck.
-	final double MASS = 15;
+	final double MASS = 20;
 	final double MAX_VELOCITY = 1000;
 	final double ACCELERATION = 200;
 	final int SCORE_TO_WIN = 7;
@@ -156,6 +156,6 @@ public class Player extends Circle {
 	// Updates the player's score, prints a message, and pauses the game for five seconds if the player scores.
 	public void goal() {
 		score += 1;
-		System.out.println(name + " has scored!");
+		
 	}
 }
