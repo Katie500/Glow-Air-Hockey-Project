@@ -53,7 +53,7 @@ public class Menu extends GameScreen{
 		getChildren().addAll(play, controls, display_box, input, input_box);
 	}
 	
-	public static void setScreen() {
+	public void setScreen() {
 		int padding = 15;
 		double button_width = WIDTH - 2 * padding;
 		double button_height = (HEIGHT - 5 * padding) / 4;
