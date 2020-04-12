@@ -6,12 +6,12 @@ import javafx.scene.paint.Color;
 
 public class Player extends Circle {
 	private String name;
-	private Color colour = Color.BLUE;
-	private double x;
+	private Color colour = Color.BLUE;  //default color of the player 
+	private double x; 
 	private double y;
-	private double velocity_x = 0;
-	private double velocity_y = 0;
-	private int score = 0;
+	private double velocity_x = 0; //making the value of velocity x equal to 0
+	private double velocity_y = 0; //making the value of velocity y equal to 0
+	private int score = 0; //initializing the score to 0
 	private Circle paddle_center = new Circle();
 	private DropShadow border_glow = new DropShadow();
 	
@@ -19,15 +19,15 @@ public class Player extends Circle {
 	final double MASS = 20;
 	final double MAX_VELOCITY = 1000;
 	final double ACCELERATION = 200;
-	final int SCORE_TO_WIN = 7;
-	final double FRICTION = 1;
+	final int SCORE_TO_WIN = 7; //required score to win the game is 7
+	final double FRICTION = 1; //initializing the friction to 1
 	
 	// Constructor used to create a player.
 	public Player(String name) {
-		setName(name);
-		setRadius(SIZE);
-		paddle_center.setFill(Color.BLACK);
-		paddle_center.setRadius(SIZE - 8);
+		setName(name); //will set the name of the player from name received from getter method
+		setRadius(SIZE); //will set the size of the paddle to be 28 as initialized above
+		paddle_center.setFill(Color.BLACK); //the center of the paddle will be colored black to give the paddle a dense and mutlicolor look
+		paddle_center.setRadius(SIZE - 8); //the center black circle will be the paddle's original (size - 8) in size   
 	}
 	
 	// Constructor used exclusively by some getter methods to eliminate privacy leaks and retain the values needed.
@@ -72,10 +72,11 @@ public class Player extends Circle {
 		return new Player(this).score;
 	}
 	
+	// Getter for the paddle's center circle
 	public Circle getCenterCircle() {
 		return paddle_center;
 	}
-	
+	// Getter for the paddle's color
 	public Color getColour() {
 		return colour;
 	}
@@ -93,20 +94,20 @@ public class Player extends Circle {
 	// Setter for player's colour.
 	public void setColour(Color colour) {
 		this.colour = colour.deriveColor(1.0,  0.8,  1.0,  5.0);
-		setFill(colour);
-		setBorderGlow();
+		setFill(colour); //set the color
+		setBorderGlow(); //add the glow effect around the paddle
 		setEffect(border_glow);
 		paddle_center.setEffect(border_glow);
 	}
 	
 	// Setting the player's border glow.
 	public void setBorderGlow() {
-		border_glow.setColor(colour);
-		border_glow.setOffsetX(0f);
-		border_glow.setOffsetY(0f);
-		border_glow.setWidth(50);
-		border_glow.setHeight(50);
-		border_glow.setRadius(SIZE + 15);
+		border_glow.setColor(colour);//creates the glow around the paddle
+		border_glow.setOffsetX(0f);//creates the glow around the paddle
+		border_glow.setOffsetY(0f);//creates the glow around the paddle
+		border_glow.setWidth(50);//creates the width of the glow 
+		border_glow.setHeight(50);//creates the height of the glow 
+		border_glow.setRadius(SIZE + 15); //creates the radius of the glow 
 	}
 	
 	// Setter for player's x position.
