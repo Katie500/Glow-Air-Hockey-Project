@@ -31,7 +31,7 @@ public class Rink extends GameScreen{
         
     }
     
-    
+    @Override
     public void setScreen() {
         
         center_circle.setRadius(80);
