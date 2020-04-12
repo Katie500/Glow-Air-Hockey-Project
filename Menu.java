@@ -53,6 +53,7 @@ public class Menu extends GameScreen{
 		getChildren().addAll(play, controls, display_box, input, input_box);
 	}
 	
+	@Override
 	public void setScreen() {
 		int padding = 15;
 		double button_width = WIDTH - 2 * padding;
