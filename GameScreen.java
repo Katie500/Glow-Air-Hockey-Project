@@ -15,7 +15,7 @@ public abstract class GameScreen extends Pane {
     protected static DropShadow green_border_glow = new DropShadow();
     protected static DropShadow red_border_glow = new DropShadow();
     
-//    public abstract void setScreen();
+    public abstract void setScreen();
     
     public static void createBorderGlows() {
         green_border_glow.setColor(Color.CHARTREUSE);
