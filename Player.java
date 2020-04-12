@@ -1,3 +1,4 @@
+package application;
 
 import javafx.scene.shape.Circle;
 import javafx.scene.effect.DropShadow;
@@ -5,7 +6,7 @@ import javafx.scene.paint.Color;
 
 public class Player extends Circle {
 	private String name;
-	private Color colour;
+	private Color colour = Color.BLUE;
 	private double x;
 	private double y;
 	private double velocity_x = 0;
@@ -15,7 +16,7 @@ public class Player extends Circle {
 	private DropShadow border_glow = new DropShadow();
 	
 	final double SIZE = 28; // The radius of the puck.
-	final double MASS = 10;
+	final double MASS = 20;
 	final double MAX_VELOCITY = 1000;
 	final double ACCELERATION = 200;
 	final int SCORE_TO_WIN = 7;
@@ -155,6 +156,6 @@ public class Player extends Circle {
 	// Updates the player's score, prints a message, and pauses the game for five seconds if the player scores.
 	public void goal() {
 		score += 1;
-		System.out.println(name + " has scored!");
+		
 	}
 }
