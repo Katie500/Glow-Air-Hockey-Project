@@ -71,9 +71,9 @@ public class Main extends Application {
 	}
 	public static state game_state = state.MENU;
 	
-//	public static void main(String [] args) {        //Pretty sure this is not necessary 
-//		launch(args);
-//	}
+	public static void main(String [] args) {         
+		launch(args);
+	}
 	
 	@Override
 	public void start(Stage primaryStage) {
