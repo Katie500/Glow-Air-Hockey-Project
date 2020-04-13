@@ -24,6 +24,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+//setting the main class as an extension of the Application class
 public class Main extends Application {
 	protected static Table table;
 	protected static boolean up, down, left, right, w, a, s, d;
@@ -58,18 +59,21 @@ public class Main extends Application {
 	    OVER
 	}
 	
+	//setting the first game state to menu
 	public static state game_state = state.MENU;
 	
 	public static void main(String [] args) {
 		launch(args);
 	}
 	
+	//setting up the start menu
 	@Override
 	public void start(Stage primaryStage) {
 		createTable();
 		createLabels();
 		createBorderGlows();
 		
+		//setting the title, size, and background for the primary stage
 		primaryStage.setTitle("Glow Air Hockey");
 		layout.setPrefSize(600, 800);
 		layout.setStyle("-fx-background-color: BLACK;");
@@ -79,29 +83,38 @@ public class Main extends Application {
 		timeline = new Timeline(new KeyFrame(Duration.millis(DELAY), new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
+				//checking the game state to see if it's menu
 				if (Main.game_state == state.MENU) {
+					//checking to see if the imput in the menu is valid
 					if (menu_finished) {
+						//getting the names and colours of the players
 						table.getPlayerOne().setName(menu.getPlayerOneName());
 						table.getPlayerTwo().setName(menu.getPlayerTwoName());
 						table.getPlayerOne().setColour(menu.getPlayerOneColour());
 						table.getPlayerTwo().setColour(menu.getPlayerTwoColour());
 						createLabels();
 						primaryStage.setScene(scene);
+						//changing the state of the game to start
 						Main.game_state = state.GAME;
 					}
 				}
-				
+				//checking the game state to see if it is the state of the game
 				else if (Main.game_state == state.GAME) {
+					//setting the goal state to false
 					boolean goal = false;
+					//creating goal data as an arraylist
 					ArrayList<Boolean> goal_data;
 					
+				//removes the score from the screen after the player has scored
         			removeScore();
-        			
+					
+				//if the player pauses the game, the label shows that it is paused
         			if (paused) {
+					//adding the paused label
         				if (!text_display.getChildren().contains(paused_label)) {
         					text_display.getChildren().add(paused_label);
         				}
-        				
+        				//adding the text display
         				if (!layout.getChildren().contains(text_display)) {
         					layout.getChildren().add(text_display);
         				}
@@ -114,51 +127,62 @@ public class Main extends Application {
         					layout.getChildren().remove(text_display);
         				}
         				
+					//updating the goal data
         				goal_data = updateGame();
     					for (int i = 0; i < goal_data.size(); i++) {
     						if (goal_data.get(i)) {
     							goal = true;
     						}
     					}
-    					
+    					//calling the controllers for the game
 	        			Controller.controllerOne();
 	        			Controller.controllerTwo();
 	        			
+					//if the game is over, change the main game state
 	        			if (table.gameOver()) {
 	        				Main.game_state = state.OVER;
-	        				
+	        					
+							//we check if player one won and if so, we send a message to the screen
+							//that says who one and set winner equal to player one
 							if (table.getPlayerOne().getScore() == table.getPlayerOne().SCORE_TO_WIN) {
 								p1.setText("Game Over\n" + table.getPlayerOne().getName() + "\nWon!");
 								winner = p1;
 							}
 							
+							//if player one didn't win, we sent a message to the screen saying that player 
+							//two won and set winner equal to player two
 							else {
 								p2.setText("Game Over\n" + table.getPlayerTwo().getName() + "\nWon!");
 								winner = p2;
 							}
-							
+							//getting the scores for both players
 							p1_score.setText(table.getPlayerOne().getScore() + "");
 							p2_score.setText(table.getPlayerTwo().getScore() + "");
 							
+							//displaying the winner on the screen
 							text_display.setSpacing(table.HEIGHT / 10);
 							text_display.getChildren().addAll(p1_score, winner, p2_score);
 							layout.getChildren().add(text_display);
 							
+							//asking if user wants to play again
 							PauseTransition pause = new PauseTransition(Duration.seconds(5));
 	        				pause.setOnFinished(e -> playAgain());
 	        				pause.play();
 	        			}
 	        			
-	        			else if (goal) {
-	        				displayScore(goal_data.get(0), goal_data.get(1));
-	        				PauseTransition pause = new PauseTransition(Duration.seconds(2));
-	        				pause.setOnFinished(e -> timeline.play());
-	        				timeline.pause();
-	        				pause.play();
+					//if new goal, show scores 
+					else if (goal) {
+						displayScore(goal_data.get(0), goal_data.get(1));
+						//show scoreboard
+						PauseTransition pause = new PauseTransition(Duration.seconds(2));
+						pause.setOnFinished(e -> timeline.play());
+						timeline.pause();
+						pause.play();
 						}
         			}
 				}
 				
+				//setting up for new game
 				else {
 					if (new_game) {
 						reset();
@@ -168,29 +192,37 @@ public class Main extends Application {
 				}
 	        }
 		}));
-				
+		
+		//getting the elements needed for the game
 		layout.getChildren().addAll(table.getPuck(), table.getPlayerOne(), table.getPlayerTwo(), table.getPlayerOne().getCenterCircle(), table.getPlayerTwo().getCenterCircle());
 		scene = new Scene(layout);
+		//setting controls for game
 		setControls();
+		//setting menu screen
 		menu_screen = new Scene(menu);
 		
+		//setting timeline
 		timeline.setCycleCount(Timeline.INDEFINITE);
 		timeline.setAutoReverse(true);
 		timeline.play();
 		
+		//running menu
 		menu.runMenu();
 		
+		//setting primary stage if game state is menu
 		if (game_state == state.MENU) {
 			primaryStage.setScene(menu_screen);
 
 		}
-		
+		//setting size for primary stage
 		primaryStage.setResizable(false);
 		primaryStage.show();
 	}
 	
+	//setting controls
 	public void setControls() {
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			//handling the controls for player one and two
 			@Override
 			public void handle(KeyEvent e) {				
 				switch (e.getCode()) {
@@ -207,10 +239,12 @@ public class Main extends Application {
 			}
 		});
 		
+		//handling when the velocity is increased based on when the key is released
 		scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent e) {
 				switch (e.getCode()) {
+				//changes case to false and gets velocity for that key
 				case UP: {
 					up = false;
 					table.getPlayerOne().setVelocityY(table.getPlayerOne().getVelocityY() * 0.2);
@@ -276,7 +310,9 @@ public class Main extends Application {
 		});
 	}
 	
+	//creating the table for the game
 	public void createTable() {
+		//setting player names
 		String player_one_name = "";
 		String player_two_name = "";
 		
@@ -306,7 +342,7 @@ public class Main extends Application {
 		return goal_data;
 	}
 	
-	
+	//creating the glow drop shadow effect for the border
 	public void createBorderGlows() {
 		green_border_glow.setColor(Color.CHARTREUSE);
 		green_border_glow.setOffsetX(0f);
@@ -321,7 +357,9 @@ public class Main extends Application {
 		red_border_glow.setHeight(50);
 	}
 	
+	//creating the background (lines on the board)
 	public void createBackground() {
+		//creating center circle
 		Circle center_circle = new Circle();
 		center_circle.setRadius(80);
 		center_circle.setFill(Color.RED);
@@ -329,12 +367,14 @@ public class Main extends Application {
 		center_circle.setCenterY(table.CENTER_Y);
 		center_circle.setEffect(red_border_glow);
 		
+		//creating the "hollow" effect for big circle
 		Circle center_circle_cover = new Circle();
 		center_circle_cover.setRadius(75);
 		center_circle_cover.setFill(Color.BLACK);
 		center_circle_cover.setCenterX(table.CENTER_X);
 		center_circle_cover.setCenterY(table.CENTER_Y);
 		
+		//creating filled center circle
 		Circle center = new Circle();
 		center.setRadius(5);
 		center.setFill(Color.RED);
@@ -342,6 +382,8 @@ public class Main extends Application {
 		center.setCenterY(table.CENTER_Y);
 		center.setEffect(red_border_glow);
 		
+		//create red border along all edges
+		//left edge
 		Rectangle left_border = new Rectangle();
 		left_border.setX(0);
 		left_border.setY(0);
@@ -350,6 +392,7 @@ public class Main extends Application {
 		left_border.setFill(Color.DARKRED);
 		left_border.setEffect(red_border_glow);
 		
+		//right edge
 		Rectangle right_border = new Rectangle();
 		right_border.setX(table.WIDTH - 10);
 		right_border.setY(0);
@@ -358,6 +401,7 @@ public class Main extends Application {
 		right_border.setFill(Color.DARKRED);
 		right_border.setEffect(red_border_glow);
 		
+		//tope edge
 		Rectangle top_border = new Rectangle();
 		top_border.setX(0);
 		top_border.setY(table.HEIGHT - 10);
@@ -366,6 +410,7 @@ public class Main extends Application {
 		top_border.setFill(Color.DARKRED);
 		top_border.setEffect(red_border_glow);
 		
+		//bottom edge
 		Rectangle bottom_border = new Rectangle();
 		bottom_border.setX(0);
 		bottom_border.setY(0);
@@ -374,6 +419,7 @@ public class Main extends Application {
 		bottom_border.setFill(Color.DARKRED);
 		bottom_border.setEffect(red_border_glow);
 		
+		//creating read center line
 		Rectangle center_line = new Rectangle();
 		center_line.setX(0);
 		center_line.setY(table.CENTER_Y + -3);
@@ -382,6 +428,7 @@ public class Main extends Application {
 		center_line.setFill(Color.RED);
 		center_line.setEffect(red_border_glow);
 		
+		//creating player one goal box
 		Rectangle player_one_goal = new Rectangle();
 		player_one_goal.setX(table.CENTER_X - table.GOAL_SIZE / 2);
 		player_one_goal.setY(0);
@@ -390,6 +437,7 @@ public class Main extends Application {
 		player_one_goal.setFill(Color.CHARTREUSE);
 		player_one_goal.setEffect(green_border_glow);
 		
+		//creating player two goal box
 		Rectangle player_two_goal = new Rectangle();
 		player_two_goal.setX(table.CENTER_X - table.GOAL_SIZE / 2);
 		player_two_goal.setY(table.HEIGHT - 10);
@@ -398,19 +446,24 @@ public class Main extends Application {
 		player_two_goal.setFill(Color.CHARTREUSE);
 		player_two_goal.setEffect(green_border_glow);
 		
+		//putting background together
 		layout.getChildren().addAll(center_line, left_border, right_border, top_border, bottom_border, player_one_goal, player_two_goal, center_circle, center_circle_cover, center);
 	}
 	
+	//creating labels
 	public void createLabels() {
+		//setting font
 		int font_size = 60;
 		Font f = new Font(Font.getDefault().getStyle(), font_size);
 		
+		//setting player one text, font, and colour etc.
 		p1_score.setText(Integer.toString(table.getPlayerOne().getScore()));
 		p1_score.setTextFill(table.getPlayerOne().getColour());
 		p1_score.setAlignment(Pos.CENTER);
 		p1_score.setTextAlignment(TextAlignment.CENTER);
 		p1_score.setEffect(table.getPlayerOne().getBorderGlow());
-
+		
+		//setting player two text, font, and colour etc.
 		p2_score.setText(Integer.toString(table.getPlayerTwo().getScore()));
 		p2_score.setTextAlignment(TextAlignment.CENTER);
 		p2_score.setAlignment(Pos.CENTER);
@@ -423,9 +476,11 @@ public class Main extends Application {
 			}
 		}
 		
+		//finalizing setting player score font
 		p1_score.setFont(f);
 		p2_score.setFont(f);
 		
+		//setting paused text
 		paused_label.setText("Paused");
 		paused_label.setFont(getFont());
 		paused_label.setAlignment(Pos.CENTER);
@@ -433,17 +488,20 @@ public class Main extends Application {
 		paused_label.setTextFill(Color.CHARTREUSE);
 		paused_label.setEffect(green_border_glow);
 		
+		//setting game over text
 		game_over_label.setText("Game Over");
 		game_over_label.setFont(getFont());
 		game_over_label.setTextFill(Color.CHARTREUSE);
 		game_over_label.setEffect(green_border_glow);
 		
+		//setting winner font
 		winner.setFont(getFont());
 		winner.setTextFill(Color.CHARTREUSE);
 		winner.setAlignment(Pos.CENTER);
 		winner.setTextAlignment(TextAlignment.CENTER);
 		winner.setEffect(green_border_glow);
 		
+		//setting the player one scored font
 		p1.setText(table.getPlayerOne().getName() + "\nScored!");
 		p1.setFont(getFont());
 		p1.setAlignment(Pos.CENTER);
@@ -452,6 +510,7 @@ public class Main extends Application {
 		p1.setEffect(green_border_glow);
 		p1.setPrefSize(table.WIDTH, table.HEIGHT / 2);
 		
+		//setting the player two scored font
 		p2.setText(table.getPlayerTwo().getName() + "\nScored!");
 		p2.setFont(getFont());
 		p2.setAlignment(Pos.CENTER);
@@ -460,12 +519,14 @@ public class Main extends Application {
 		p2.setEffect(green_border_glow);
 		p2.setPrefSize(table.WIDTH,  table.HEIGHT / 2);
 		
+		//setting table display
 		text_display.setPrefSize(table.WIDTH,  table.HEIGHT);
 		text_display.setAlignment(Pos.CENTER);
 		text_display.setLayoutX(0);
 		text_display.setLayoutY(0);
 		text_display.setSpacing(table.HEIGHT / 10);
 		
+		//setting the new game text
 		play_again.setText("New Game?");
 		play_again.setTextFill(Color.CHARTREUSE);
 		play_again.setFont(getFont());
@@ -474,10 +535,13 @@ public class Main extends Application {
 		play_again.setTextAlignment(TextAlignment.CENTER);
 	}
 	
-	public void displayScore(boolean p1_goal, boolean p2_goal) {	
+	//displaying the score
+	public void displayScore(boolean p1_goal, boolean p2_goal) {
+		//getting player scores
 		p1_score.setText(Integer.toString(table.getPlayerOne().getScore()));
 		p2_score.setText(Integer.toString(table.getPlayerTwo().getScore()));
 		
+		//checking to see if any player scored
 		if (p1_goal) {
 			text_display.getChildren().addAll(p1_score, p1, p2_score);
 		}
@@ -493,6 +557,7 @@ public class Main extends Application {
 		layout.getChildren().add(text_display);
 	}
 	
+	//clearing the score from the the display
 	public void removeScore() {
 		text_display.getChildren().clear();
 		
@@ -501,13 +566,16 @@ public class Main extends Application {
 		}
 	}	
 	
+	//getting the font
 	public Font getFont() {
 		int font_size = 60;
 		Font font = new Font(Font.getDefault().getStyle(), font_size);
 		
+		//getting the font name
 		for (String f: Font.getFontNames()) {
 			if (f.equals("Bauhaus 93")) {
 				font = new Font(f, font_size * 1.3);
+				//setting player layout
 				p1_score.setLayoutX(p1_score.getLayoutX() - 5);
 				p2_score.setLayoutX(p2_score.getLayoutX() - 5);
 			}
@@ -515,18 +583,22 @@ public class Main extends Application {
 		
 		Main.font = font;
 		
+		//returning the font
 		return font;
 	}
 	
+	//if the user wants to play again
 	public void playAgain() {
 		timeline.pause();
 		play_again.setOnAction(new EventHandler<ActionEvent>() {
+			//handling the new game
 			@Override
 			public void handle(ActionEvent e) {
 				new_game = true;
 				timeline.play();
 			}
 		});
+		//clearing the display to play again
 		text_display.getChildren().clear();
 		text_display.getChildren().add(play_again);
 		
@@ -535,6 +607,7 @@ public class Main extends Application {
 		}
 	}
 	
+	//setting up for resetting the game
 	public void reset() {
 		text_display.getChildren().clear();
 		layout = new Pane();
