@@ -1,6 +1,5 @@
 package gui;
 
-import javafx.application.Application;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
