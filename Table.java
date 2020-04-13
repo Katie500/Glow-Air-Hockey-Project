@@ -1,3 +1,4 @@
+package application;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -94,40 +95,47 @@ public class Table {
 		}
 	}
 	
+
+	
 	// This function checks if either player has scored. If one has then the score of the corresponding player is changed and the puck and paddles are reset to the center of the table.
-	public boolean checkForGoal() {
-		// Checking to see if player two has scored.
-		if ((puck.getX() > (CENTER_X - (GOAL_SIZE / 2) + puck.SIZE) && (puck.getX() < (CENTER_X + (GOAL_SIZE / 2) - puck.SIZE))) && (puck.getY() <= puck.SIZE)) {
-			player_two.goal();
-			
-			// Resetting both players' paddles to their default positions.
-			resetPuck();
-			resetPlayerOne();
-			resetPlayerTwo();
-			
-			// Resetting velocities to 0.
-			resetVelocities();
-			
-			return true;
-		}
-		
-		// Checking to see if player one has scored.
-		if ((puck.getX() > (CENTER_X - (GOAL_SIZE / 2) + puck.SIZE) && (puck.getX() < (CENTER_X + (GOAL_SIZE / 2) - puck.SIZE) )) && (puck.getY() >= HEIGHT - puck.SIZE)) {
-			player_one.goal();
-			
-			// Resetting positions.
-			resetPuck();
-			resetPlayerOne();
-			resetPlayerTwo();
-			
-			// Resetting velocities.
-			resetVelocities();
-			
-			return true;
-		}
-		
-		return false;
-	}
+    public ArrayList<Boolean> checkForGoal() {
+        boolean p1 = false;
+        boolean p2 = false;
+        
+        // Checking to see if player two has scored.
+        if ((puck.getX() > (CENTER_X - (GOAL_SIZE / 2) + puck.SIZE) && (puck.getX() < (CENTER_X + (GOAL_SIZE / 2) - puck.SIZE))) && (puck.getY() <= puck.SIZE)) {
+            player_two.goal();
+            
+            // Resetting both players' paddles to their default positions.
+            resetPuck();
+            resetPlayerOne();
+            resetPlayerTwo();
+            
+            // Resetting velocities to 0.
+            resetVelocities();
+            
+            p2 = true;
+        }
+        
+        // Checking to see if player one has scored.
+        if ((puck.getX() > (CENTER_X - (GOAL_SIZE / 2) + puck.SIZE) && (puck.getX() < (CENTER_X + (GOAL_SIZE / 2) - puck.SIZE) )) && (puck.getY() >= HEIGHT - puck.SIZE)) {
+            player_one.goal();
+            
+            // Resetting positions.
+            resetPuck();
+            resetPlayerOne();
+            resetPlayerTwo();
+            
+            // Resetting velocities.
+            resetVelocities();
+            
+            p1 = true;
+        }
+        
+        return new ArrayList<Boolean>(Arrays.asList(p1, p2));
+    }
+	
+	
 	
 	// Sets velocities of both paddles and the puck to 0.
 	public void resetVelocities() {
