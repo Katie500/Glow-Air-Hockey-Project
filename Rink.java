@@ -23,9 +23,13 @@ public class Rink extends GameScreen{
     public static Pane layout = new Pane();
     
     
+    public Rink() {
+        setStyle("-fx-background-color: BLACK;");
+        setPrefSize(WIDTH, HEIGHT);
+    }
+    
+    
     public void runRink() {
-        layout.setPrefSize(WIDTH, HEIGHT);
-        layout.setStyle("-fx-background-color: BLACK;");
         setScreen();
         getChildren().addAll(center_line, left_border, right_border, top_border, bottom_border, player_one_goal, player_two_goal, center_circle, center_circle_cover, center);
         
