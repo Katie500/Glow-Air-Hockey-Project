@@ -7,11 +7,11 @@ import javafx.scene.paint.Color;
 public class Puck extends Circle {
 	private double x;
 	private double y;
-	private double velocity_x = 0; //making the value of velocity x equal to 0
-	private double velocity_y = 0; //making the value of velocity y equal to 0
+    private double velocity_x = 0; //making the value of velocity x equal to 0
+    private double velocity_y = 0; //making the value of velocity y equal to 0
 	
-	final double SIZE = 20; // Initializes the radius of the puck to be 20
-	final double MASS = 10; //Initializes the mass of the puck to be 10
+    final double SIZE = 20; // Initializes the radius of the puck to be 20
+    final double MASS = 10; //Initializes the mass of the puck to be 10
 	final double MAX_VELOCITY = 1500;
 	final double FRICTION = 0.997;
 	final Color COLOUR = Color.RED; //the default color of the puck is red
@@ -20,13 +20,13 @@ public class Puck extends Circle {
 	public Puck() {
 		setRadius(SIZE);
 		setFill(COLOUR.deriveColor(1.0,  0.8,  1.0,  5.0));
-		DropShadow border_glow = new DropShadow(); //creates the glow around the puck 
-		border_glow.setColor(COLOUR); //creates the glow around the puck 
-		border_glow.setOffsetX(0f); //creates the glow around the puck 
-		border_glow.setOffsetY(0f); //creates the glow around the puck 
-//		border_glow.setWidth(50); //creates the width of the glow 
-		border_glow.setHeight(50); //creates the height of the glow 
-		border_glow.setRadius(SIZE + 15); //creates the radius of the glow 
+        DropShadow border_glow = new DropShadow(); //creates the glow around the puck 
+        border_glow.setColor(COLOUR); //creates the glow around the puck 
+        border_glow.setOffsetX(0f); //creates the glow around the puck 
+        border_glow.setOffsetY(0f); //creates the glow around the puck 
+        border_glow.setWidth(50); //creates the width of the glow 
+        border_glow.setHeight(50); //creates the height of the glow 
+        border_glow.setRadius(SIZE + 15); //creates the radius of the glow 
 		setEffect(border_glow);
 	}
 	
