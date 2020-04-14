@@ -19,7 +19,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 
 public class Menu extends GameScreen{
-	private static Button play = new Button();
+	//declaring elements of the gui
+    private static Button play = new Button();
 	private static Button controls = new Button();
 	private static Button display_box = new Button();
 	private static Button input = new Button();
@@ -36,23 +37,24 @@ public class Menu extends GameScreen{
 	private static String player_two_name = "";
 	private static Color player_one_colour;
 	private static Color player_two_colour;
-//	protected DropShadow green_border_glow = new DropShadow();
-//	protected DropShadow red_border_glow = new DropShadow();
-	protected static Font font = new Font("bauhaus 93", 45);
+	private static Font font = new Font("bauhaus 93", 45);
 	
 
-	
+	//basic constructor for menu screen
 	public Menu() {
 		setPrefSize(WIDTH, HEIGHT);
 		setStyle("-fx-background-color: BLACK;");
 	}
 	
+	//method to build the menu gui
 	public void runMenu() {
-		setScreen();
+		getChildren().clear();
+	    setScreen();
 		setButtons();
 		getChildren().addAll(play, controls, display_box, input, input_box);
 	}
 	
+	//overriding abstract method to build all elements of the menu screen
 	@Override
 	public void setScreen() {
 		int padding = 15;
@@ -65,16 +67,16 @@ public class Menu extends GameScreen{
 		play.setText("Play");
 		play.setAlignment(Pos.CENTER);
 		play.setTextFill(Color.CHARTREUSE);
-		play.setFont(font);
-		play.setEffect(green_border_glow);
+		play.setFont(getFont());
+		play.setEffect(getGreen_border_glow());
 		
 		double controls_y = HEIGHT - button_height - padding;
 		
 		controls.setText("Controls");
-		controls.setFont(font);
+		controls.setFont(getFont());
 		controls.setAlignment(Pos.CENTER);
 		controls.setTextFill(Color.CHARTREUSE);
-		controls.setEffect(green_border_glow);
+		controls.setEffect(getGreen_border_glow());
 		controls.setPrefSize(button_width, button_height);
 		controls.setLayoutX(padding);
 		controls.setLayoutY(controls_y);
@@ -85,7 +87,7 @@ public class Menu extends GameScreen{
 		display_box.setLayoutX(padding);
 		display_box.setLayoutY(display_box_y);
 		
-		info.setFont(new Font(font.getName(), 15));
+		info.setFont(new Font(getFont().getName(), 15));
 		info.setAlignment(Pos.CENTER);
 		info.setTextAlignment(TextAlignment.CENTER);
 		info.setTextFill(Color.BLACK);
@@ -94,7 +96,7 @@ public class Menu extends GameScreen{
 		info.setPrefSize(button_width, button_height);
 		info.setText("Use the arrow keys for player one (top of the screen).\nUse WASD for player two (bottom of the screen).\nThe game is over when one player reaches seven points.\nPress P to pause and unpause the game."); 
 		
-		play_requirements.setFont(new Font(font.getName(), 15));
+		play_requirements.setFont(new Font(getFont().getName(), 15));
 		play_requirements.setAlignment(Pos.CENTER);
 		play_requirements.setTextAlignment(TextAlignment.CENTER);
 		play_requirements.setTextFill(Color.BLACK);
@@ -115,21 +117,25 @@ public class Menu extends GameScreen{
 		
 		p1_input_box.setPrefSize(button_width / 2,  button_height / 2);
 		p1_input_box.setSpacing(10);
+		p1_input_box.getChildren().clear();
 		p1_input_box.getChildren().addAll(player_one_name, p1_name, player_one_colour, p1_colour);
 		p1_input_box.setAlignment(Pos.CENTER);
 		
 		p2_input_box.setPrefSize(button_width / 2, button_height / 2);
 		p2_input_box.setSpacing(10);
+		p2_input_box.getChildren().clear();
 		p2_input_box.getChildren().addAll(player_two_name, p2_name, player_two_colour, p2_colour);
 		p2_input_box.setAlignment(Pos.CENTER);
 		
 		input_box.setPrefSize(button_width,  button_height);
 		input_box.setLayoutX(padding);
 		input_box.setLayoutY(input_box_y);
+		input_box.getChildren().clear();
 		input_box.getChildren().addAll(p1_input_box, p2_input_box);
 		input_box.setAlignment(Pos.CENTER);
 	}
 	
+	//This method handles events when a button is pushed
 	public void setButtons() {
 		controls.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -146,9 +152,10 @@ public class Menu extends GameScreen{
 		});
 	}
 	
+	//If the user hits the displayControls button text will show up to inform the user how to play the game
 	public void displayControls() {
 		if (getChildren().contains(info)) {
-			controls.setEffect(green_border_glow);
+			controls.setEffect(getGreen_border_glow());
 			controls.setTextFill(Color.CHARTREUSE);
 			getChildren().remove(info);
 		}
@@ -160,12 +167,13 @@ public class Menu extends GameScreen{
 		}
 	
 		play.setTextFill(Color.CHARTREUSE);
-		play.setEffect(green_border_glow);
+		play.setEffect(getGreen_border_glow());
 		if (getChildren().contains(play_requirements)) {
 			getChildren().remove(play_requirements);
 		}
 	}
 	
+	//helper method for inputIsValid. If the input is valid it will change Main.menu_finished to true which will commence the game. 
 	public void play() {
 		if (inputIsValid()) {
 			Main.menu_finished = true;                                                            
@@ -182,10 +190,11 @@ public class Menu extends GameScreen{
 			play.setTextFill(Color.RED);
 			play.setEffect(red_border_glow);
 			controls.setTextFill(Color.CHARTREUSE);
-			controls.setEffect(green_border_glow);
+			controls.setEffect(getGreen_border_glow());
 		}
 	}
 	
+	//method to determine whether the users input to the method is valid. If not the method will display an error and highlight the information that needs to be altered.
 	public boolean inputIsValid() {
 		boolean valid = true;
 		player_one_name = p1_name.getText();
@@ -199,7 +208,7 @@ public class Menu extends GameScreen{
 		}
 		
 		else {
-			p1_name.setEffect(green_border_glow);
+			p1_name.setEffect(getGreen_border_glow());
 		}
 		
 		if (player_two_name.length() < 1 | player_two_name.length() > 10 | player_two_name == null) {
@@ -208,12 +217,12 @@ public class Menu extends GameScreen{
 		}
 		
 		else {
-			p2_name.setEffect(green_border_glow);
+			p2_name.setEffect(getGreen_border_glow());
 		}
 		
 		try {
 			player_one_colour = Color.valueOf(c1);
-			p1_colour.setEffect(green_border_glow);
+			p1_colour.setEffect(getGreen_border_glow());
 		}
 		
 		catch (Exception e) {
@@ -223,7 +232,7 @@ public class Menu extends GameScreen{
 		
 		try {
 			player_two_colour = Color.valueOf(c2);
-			p2_colour.setEffect(green_border_glow);
+			p2_colour.setEffect(getGreen_border_glow());
 		}
 		
 		catch (Exception e) {
@@ -234,6 +243,7 @@ public class Menu extends GameScreen{
 		return valid;
 	}
 	
+	//getters and setter for font, player names and colours to access from other classes/packages.
 	public String getPlayerOneName() {
 		return player_one_name;
 	}
@@ -249,6 +259,14 @@ public class Menu extends GameScreen{
 	public Color getPlayerTwoColour() {
 		return player_two_colour;
 	}
+
+    public static Font getFont() {
+        return font;
+    }
+
+    public static void setFont(Font font) {
+        Menu.font = font;
+    }
 
 	
 
