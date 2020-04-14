@@ -19,7 +19,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 
 public class Menu extends GameScreen{
-	//declaring elements of the gui
+	//instantiating elements of the gui
     private static Button play = new Button();
 	private static Button controls = new Button();
 	private static Button display_box = new Button();
