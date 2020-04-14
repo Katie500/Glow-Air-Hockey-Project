@@ -2,6 +2,7 @@ package application;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
 import java.lang.Math;
 
 public class Table {
@@ -9,7 +10,7 @@ public class Table {
 	final double HEIGHT = 800;
 	final double CENTER_X = WIDTH / 2;
 	final double CENTER_Y = HEIGHT / 2;
-	final double GOAL_SIZE = 125;
+	final double GOAL_SIZE = 150;
 	final double PLAYER_ONE_DEFAULT_Y = HEIGHT / 4;
 	final double PLAYER_TWO_DEFAULT_Y = HEIGHT - (HEIGHT / 4);
 	final double SCORE_TO_WIN = 7;
@@ -95,47 +96,43 @@ public class Table {
 		}
 	}
 	
-
-	
 	// This function checks if either player has scored. If one has then the score of the corresponding player is changed and the puck and paddles are reset to the center of the table.
-    public ArrayList<Boolean> checkForGoal() {
-        boolean p1 = false;
-        boolean p2 = false;
-        
-        // Checking to see if player two has scored.
-        if ((puck.getX() > (CENTER_X - (GOAL_SIZE / 2) + puck.SIZE) && (puck.getX() < (CENTER_X + (GOAL_SIZE / 2) - puck.SIZE))) && (puck.getY() <= puck.SIZE)) {
-            player_two.goal();
-            
-            // Resetting both players' paddles to their default positions.
-            resetPuck();
-            resetPlayerOne();
-            resetPlayerTwo();
-            
-            // Resetting velocities to 0.
-            resetVelocities();
-            
-            p2 = true;
-        }
-        
-        // Checking to see if player one has scored.
-        if ((puck.getX() > (CENTER_X - (GOAL_SIZE / 2) + puck.SIZE) && (puck.getX() < (CENTER_X + (GOAL_SIZE / 2) - puck.SIZE) )) && (puck.getY() >= HEIGHT - puck.SIZE)) {
-            player_one.goal();
-            
-            // Resetting positions.
-            resetPuck();
-            resetPlayerOne();
-            resetPlayerTwo();
-            
-            // Resetting velocities.
-            resetVelocities();
-            
-            p1 = true;
-        }
-        
-        return new ArrayList<Boolean>(Arrays.asList(p1, p2));
-    }
-	
-	
+	public ArrayList<Boolean> checkForGoal() {
+		boolean p1 = false;
+		boolean p2 = false;
+		
+		// Checking to see if player two has scored.
+		if ((puck.getX() > (CENTER_X - (GOAL_SIZE / 2) + puck.SIZE) && (puck.getX() < (CENTER_X + (GOAL_SIZE / 2) - puck.SIZE))) && (puck.getY() <= puck.SIZE)) {
+			player_two.goal();
+			
+			// Resetting both players' paddles to their default positions.
+			resetPuck();
+			resetPlayerOne();
+			resetPlayerTwo();
+			
+			// Resetting velocities to 0.
+			resetVelocities();
+			
+			p2 = true;
+		}
+		
+		// Checking to see if player one has scored.
+		if ((puck.getX() > (CENTER_X - (GOAL_SIZE / 2) + puck.SIZE) && (puck.getX() < (CENTER_X + (GOAL_SIZE / 2) - puck.SIZE) )) && (puck.getY() >= HEIGHT - puck.SIZE)) {
+			player_one.goal();
+			
+			// Resetting positions.
+			resetPuck();
+			resetPlayerOne();
+			resetPlayerTwo();
+			
+			// Resetting velocities.
+			resetVelocities();
+			
+			p1 = true;
+		}
+		
+		return new ArrayList<Boolean>(Arrays.asList(p1, p2));
+	}
 	
 	// Sets velocities of both paddles and the puck to 0.
 	public void resetVelocities() {
@@ -189,16 +186,9 @@ public class Table {
 		}
 	}
 	
-	// This function checks if the game is over. If a player has won the game it returns true and prints a game over message.
+	// This function checks if the game is over. If a player has won the game.
 	public boolean gameOver() {
 		if (player_one.getScore() == SCORE_TO_WIN | player_two.getScore() == SCORE_TO_WIN) {
-			if (player_one.getScore() == SCORE_TO_WIN) {
-				System.out.println("The game is over. " + player_one.getName() + " won the game. The final score was " + player_one.getScore() + "-" + player_two.getScore() + ".");
-			}
-			else {
-				System.out.println("The game is over. " + player_one.getName() + " won the game. The final score was " + player_two.getScore() + "-" + player_one.getScore() + ".");
-
-			}
 			return true;
 		}
 		return false;
