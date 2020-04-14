@@ -373,11 +373,13 @@ public class Main extends Application {
 			public void handle(ActionEvent e) {
 				new_game = true;
 				timeline.play();
+				rink.getChildren().clear();
+				reset();
 			}
 		});
 		text_display.getChildren().clear();
 		text_display.getChildren().add(play_again);
-		rink.getChildren().add(layout);		
+//		rink.getChildren().add(layout);		
 		if (!layout.getChildren().contains(text_display)) {
 			layout.getChildren().add(text_display);
 			rink.getChildren().add(layout);
