@@ -37,8 +37,8 @@ import javafx.util.Duration;
 public class Main extends Application {
 	protected static Table table;
 	protected static boolean up, down, left, right, w, a, s, d;
-	protected static DropShadow green_border_glow = new DropShadow();
-	protected static DropShadow red_border_glow = new DropShadow();
+//	protected static DropShadow green_border_glow = new DropShadow();
+//	protected static DropShadow red_border_glow = new DropShadow();
 	protected static Font font;
 	public static boolean menu_finished = false;         // Necessary to access from gui package
 	
@@ -177,6 +177,7 @@ public class Main extends Application {
 							text_display.setSpacing(table.HEIGHT / 10);
 							text_display.getChildren().addAll(p1_score, winner, p2_score);
 							layout.getChildren().add(text_display);
+							rink.getChildren().add(layout);
 							
 							//asking if user wants to play again after the game over message has been displayed for a while. 
 							PauseTransition pause = new PauseTransition(Duration.seconds(5));
@@ -293,20 +294,20 @@ public class Main extends Application {
 		paused_label.setAlignment(Pos.CENTER);
 		paused_label.setTextAlignment(TextAlignment.CENTER);
 		paused_label.setTextFill(Color.CHARTREUSE);
-		paused_label.setEffect(green_border_glow);
+		paused_label.setEffect(GameScreen.getGreen_border_glow());
 		
 		//setting up game over text
 		game_over_label.setText("Game Over");
 		game_over_label.setFont(getFont());
 		game_over_label.setTextFill(Color.CHARTREUSE);
-		game_over_label.setEffect(green_border_glow);
+		game_over_label.setEffect(GameScreen.getGreen_border_glow());
 		
 		//setting up game winner message
 		winner.setFont(getFont());
 		winner.setTextFill(Color.CHARTREUSE);
 		winner.setAlignment(Pos.CENTER);
 		winner.setTextAlignment(TextAlignment.CENTER);
-		winner.setEffect(green_border_glow);
+		winner.setEffect(GameScreen.getGreen_border_glow());
 		
 		//setting the player one scored font
 		p1.setText(table.getPlayerOne().getName() + "\nScored!");
@@ -314,7 +315,7 @@ public class Main extends Application {
 		p1.setAlignment(Pos.CENTER);
 		p1.setTextAlignment(TextAlignment.CENTER);
 		p1.setTextFill(Color.CHARTREUSE);
-		p1.setEffect(green_border_glow);
+		p1.setEffect(GameScreen.getGreen_border_glow());
 		p1.setPrefSize(table.WIDTH, table.HEIGHT / 2);
 		
 		//setting the player two scored font
@@ -323,7 +324,7 @@ public class Main extends Application {
 		p2.setAlignment(Pos.CENTER);
 		p2.setTextAlignment(TextAlignment.CENTER);
 		p2.setTextFill(Color.CHARTREUSE);
-		p2.setEffect(green_border_glow);
+		p2.setEffect(GameScreen.getGreen_border_glow());
 		p2.setPrefSize(table.WIDTH,  table.HEIGHT / 2);
 		
 		//setting table display
