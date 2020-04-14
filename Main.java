@@ -188,7 +188,7 @@ public class Main extends Application {
 	        			//if new goal, show scores 
 	        			else if (goal) {
 	        				displayScore(goal_data.get(0), goal_data.get(1));
-	        				PauseTransition pause = new PauseTransition(Duration.seconds(2));
+	        				PauseTransition pause = new PauseTransition(Duration.seconds(1));
 	        				pause.setOnFinished(e -> timeline.play());
 	        				timeline.pause();
 	        				pause.play();
@@ -196,14 +196,7 @@ public class Main extends Application {
         			}
 				}
 				
-				//setting up for new game
-				else {
-					if (new_game) {
-						reset();
-						new_game = false;
-						primaryStage.setScene(new Scene(menu));
-					}
-				}
+
 	        }
 		}));
 				
@@ -335,9 +328,9 @@ public class Main extends Application {
 		text_display.setSpacing(table.HEIGHT / 10);
 		
 		//setting the new game text
-		play_again.setText("New Game?");
+		play_again.setText("Run Program Again to \n Begin a New Game");
 		play_again.setTextFill(Color.CHARTREUSE);
-		play_again.setFont(getFont());
+		play_again.setFont(Menu.getFont());
 		play_again.setPrefSize(table.WIDTH - 20,  table.HEIGHT / 3);
 		play_again.setAlignment(Pos.CENTER);
 		play_again.setTextAlignment(TextAlignment.CENTER);
@@ -402,38 +395,20 @@ public class Main extends Application {
 			//handling of play again button click 
 		    @Override
 			public void handle(ActionEvent e) {
-				new_game = true;
-				timeline.play();
-				rink.getChildren().clear();
-				reset();
+		        System.exit(0);
+
 			}
 		});
-		//clearing the display to play again
+		//clearing the display just in case anything is showing that shouldn't be, showing play again button
 		text_display.getChildren().clear();
 		text_display.getChildren().add(play_again);
-//		rink.getChildren().add(layout);		
+	
 		if (!layout.getChildren().contains(text_display)) {
 			layout.getChildren().add(text_display);
+//			rink.getChildren().clear();
 			rink.getChildren().add(layout);
 		}
 	}
 	
-	//method to reset the game and begin again from the menu
-	public void reset() {
-		text_display.getChildren().clear();
-		layout = new Pane();
-		layout.setPrefSize(600, 800);
-		layout.setStyle("-fx-background-color: BLACK;");
-		rink.runRink();
-		menu = new Menu();
-		menu.runMenu();
-		createTable();
-		createLabels();
-		layout.getChildren().addAll(table.getPuck(), table.getPlayerOne(), table.getPlayerTwo(), table.getPlayerOne().getCenterCircle(), table.getPlayerTwo().getCenterCircle());
-		rink.getChildren().add(layout);
-		scene = new Scene(layout);
-		Controller.setControls();
-		Main.game_state = state.MENU;
-		menu_finished = false;
-	}
+
 }
