@@ -7,6 +7,7 @@ import javafx.scene.shape.Rectangle;
 
 public class Rink extends GameScreen{
 
+    //instantiating elements required to build the rink
     private static Circle center_circle = new Circle();
     private static Circle center_circle_cover = new Circle();
     private static Circle center = new Circle();
@@ -22,18 +23,21 @@ public class Rink extends GameScreen{
     
     public static Pane layout = new Pane();
     
-    
+    //constructor to set basic elements of the rink
     public Rink() {
         setPrefSize(WIDTH, HEIGHT);
         setStyle("-fx-background-color: BLACK;");
     }
     
+    //method that can be called to build the rink.
     public void runRink() {
+        getChildren().clear();
         setScreen();
         getChildren().addAll(center_line, left_border, right_border, top_border, bottom_border, player_one_goal, player_two_goal, center_circle, center_circle_cover, center);
         
     }
     
+    //Overriding abstract method to build all the GUI elements of the hockey rink.
     @Override
     public void setScreen() {
         
@@ -102,7 +106,7 @@ public class Rink extends GameScreen{
         player_one_goal.setHeight(10);
         player_one_goal.setWidth(GameScreen.GOAL_SIZE);
         player_one_goal.setFill(Color.CHARTREUSE);
-        player_one_goal.setEffect(GameScreen.green_border_glow);
+        player_one_goal.setEffect(GameScreen.getGreen_border_glow());
         
         
         player_two_goal.setX(GameScreen.CENTER_X - GameScreen.GOAL_SIZE / 2);
@@ -110,9 +114,9 @@ public class Rink extends GameScreen{
         player_two_goal.setHeight(10);
         player_two_goal.setWidth(GameScreen.GOAL_SIZE);
         player_two_goal.setFill(Color.CHARTREUSE);
-        player_two_goal.setEffect(GameScreen.green_border_glow);
+        player_two_goal.setEffect(GameScreen.getGreen_border_glow());
         
-        //layout.getChildren().addAll(center_line, left_border, right_border, top_border, bottom_border, player_one_goal, player_two_goal, center_circle, center_circle_cover, center);
+        
 
     }  
  
