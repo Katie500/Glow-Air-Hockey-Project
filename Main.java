@@ -37,8 +37,6 @@ import javafx.util.Duration;
 public class Main extends Application {
 	protected static Table table;
 	protected static boolean up, down, left, right, w, a, s, d;
-//	protected static DropShadow green_border_glow = new DropShadow();
-//	protected static DropShadow red_border_glow = new DropShadow();
 	protected static Font font;
 	public static boolean menu_finished = false;         // Necessary to access from gui package
 	
@@ -56,7 +54,7 @@ public class Main extends Application {
 	private Label winner = new Label();
 	protected static Scene scene;
 	private Scene menu_screen;
-	public static Scene rink_screen;
+	private static Scene rink_screen;
 	private VBox text_display = new VBox();
 	private Button play_again = new Button();
 	private boolean new_game = false;
@@ -72,11 +70,11 @@ public class Main extends Application {
 	//setting the first game state to menu
 	public static state game_state = state.MENU;
 	
-	public static void main(String [] args) {        //Pretty sure this is not necessary 
+	public static void main(String [] args) {  
 		launch(args);
 	}
 	
-	//setting up the start menu
+	//setting up the stage
 	@Override
 	public void start(Stage primaryStage) {
 		createTable();
@@ -87,9 +85,8 @@ public class Main extends Application {
 		primaryStage.setTitle("Glow Air Hockey");
 		layout.setPrefSize(Rink.WIDTH, Rink.HEIGHT);
 		layout.setStyle("-fx-background-color: BLACK;");
-//		Rink.setScreen();
 		rink.runRink();
-		rink_screen = new Scene(rink);
+		setRink_screen(new Scene(rink));
 				
 		
 		// Timeline to call the event handler every 10ms to update the table.
@@ -103,7 +100,7 @@ public class Main extends Application {
 						table.getPlayerOne().setColour(menu.getPlayerOneColour());
 						table.getPlayerTwo().setColour(menu.getPlayerTwoColour());
 						createLabels();
-						primaryStage.setScene(rink_screen);
+						primaryStage.setScene(getRink_screen());
 						Controller.setControls();
 						Main.game_state = state.GAME;
 					}
@@ -188,7 +185,7 @@ public class Main extends Application {
 	        			//if new goal, show scores 
 	        			else if (goal) {
 	        				displayScore(goal_data.get(0), goal_data.get(1));
-	        				PauseTransition pause = new PauseTransition(Duration.seconds(1));
+	        				PauseTransition pause = new PauseTransition(Duration.seconds(2));
 	        				pause.setOnFinished(e -> timeline.play());
 	        				timeline.pause();
 	        				pause.play();
@@ -409,6 +406,14 @@ public class Main extends Application {
 			rink.getChildren().add(layout);
 		}
 	}
+
+    public static Scene getRink_screen() {
+        return rink_screen;
+    }
+
+    public static void setRink_screen(Scene rink_screen) {
+        Main.rink_screen = rink_screen;
+    }
 	
 
 }
