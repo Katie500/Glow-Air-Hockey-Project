@@ -55,7 +55,7 @@ public class Controller extends Main {
 	}
 
 	public static void setControls() {
-	    rink_screen.setOnKeyPressed(new EventHandler<KeyEvent>() {
+	    getRink_screen().setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent e) {                
                 switch (e.getCode()) {
@@ -72,7 +72,7 @@ public class Controller extends Main {
             }
         });
         
-        rink_screen.setOnKeyReleased(new EventHandler<KeyEvent>() {
+        getRink_screen().setOnKeyReleased(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent e) {
                 switch (e.getCode()) {
