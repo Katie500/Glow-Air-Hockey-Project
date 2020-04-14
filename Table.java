@@ -3,14 +3,16 @@ package application;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import gui.GameScreen;
+
 import java.lang.Math;
 
 public class Table {
-	final double WIDTH = 600;
-	final double HEIGHT = 800;
-	final double CENTER_X = WIDTH / 2;
-	final double CENTER_Y = HEIGHT / 2;
-	final double GOAL_SIZE = 150;
+	final double WIDTH = GameScreen.WIDTH;
+	final double HEIGHT = GameScreen.HEIGHT;
+	final double CENTER_X = GameScreen.WIDTH / 2;
+	final double CENTER_Y = GameScreen.HEIGHT / 2;
+	final double GOAL_SIZE = GameScreen.GOAL_SIZE;
 	final double PLAYER_ONE_DEFAULT_Y = HEIGHT / 4;
 	final double PLAYER_TWO_DEFAULT_Y = HEIGHT - (HEIGHT / 4);
 	final double SCORE_TO_WIN = 7;
