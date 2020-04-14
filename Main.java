@@ -35,7 +35,7 @@ import javafx.util.Duration;
 
 
 public class Main extends Application {
-	public static Table table;
+	protected static Table table;
 	protected static boolean up, down, left, right, w, a, s, d;
 	protected static DropShadow green_border_glow = new DropShadow();
 	protected static DropShadow red_border_glow = new DropShadow();
@@ -44,22 +44,22 @@ public class Main extends Application {
 	
 	private Menu menu = new Menu();
 	private Rink rink = new Rink();
-	public static Timeline timeline;
-//	private Pane layout = new Pane();
-//	private Label p1_score = new Label();
-//	private Label p2_score = new Label();
-//	private Label p1 = new Label();
-//	private Label p2 = new Label();
+	private Timeline timeline;
+	private Pane layout = new Pane();
+	private Label p1_score = new Label();
+	private Label p2_score = new Label();
+	private Label p1 = new Label();
+	private Label p2 = new Label();
 	protected static boolean paused = false;
-//	private Label paused_label = new Label();
-//	private Label game_over_label = new Label();
-//	private Label winner = new Label();
+	private Label paused_label = new Label();
+	private Label game_over_label = new Label();
+	private Label winner = new Label();
 	protected static Scene scene;
 	private Scene menu_screen;
 	public static Scene rink_screen;
-//	private VBox text_display = new VBox();
-//	private Button play_again = new Button();
-	public static boolean new_game = false;
+	private VBox text_display = new VBox();
+	private Button play_again = new Button();
+	private boolean new_game = false;
 	
 	final static int DELAY = 10;
 	final static int BASE_VELOCITY = 30;
@@ -71,23 +71,25 @@ public class Main extends Application {
 	}
 	public static state game_state = state.MENU;
 	
-	public static void main(String [] args) {         
+	public static void main(String [] args) {        //Pretty sure this is not necessary 
 		launch(args);
 	}
 	
 	@Override
 	public void start(Stage primaryStage) {
 		createTable();
-		rink.createLabels();
+		createLabels();
 		GameScreen.createBorderGlows();
 		
 		primaryStage.setTitle("Glow Air Hockey");
-//		layout.setPrefSize(Rink.WIDTH, Rink.HEIGHT);
-//		layout.setStyle("-fx-background-color: BLACK;");
+		layout.setPrefSize(Rink.WIDTH, Rink.HEIGHT);
+		layout.setStyle("-fx-background-color: BLACK;");
+//		Rink.setScreen();
 		rink.runRink();
 		rink_screen = new Scene(rink);
-				
-		// Timeline to call the event handler every 10ms to update the table.
+				// Timeline to call the event handler every 10ms to update the table.
+		
+		
 		timeline = new Timeline(new KeyFrame(Duration.millis(DELAY), new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -97,7 +99,7 @@ public class Main extends Application {
 						table.getPlayerTwo().setName(menu.getPlayerTwoName());
 						table.getPlayerOne().setColour(menu.getPlayerOneColour());
 						table.getPlayerTwo().setColour(menu.getPlayerTwoColour());
-						rink.createLabels();
+						createLabels();
 						primaryStage.setScene(rink_screen);
 						Controller.setControls();
 						Main.game_state = state.GAME;
@@ -108,14 +110,27 @@ public class Main extends Application {
 					boolean goal = false;
 					ArrayList<Boolean> goal_data;
 					
-        			rink.removeScore();
+        			removeScore();
         			
         			if (paused) {
-        				rink.showPausedLabel();
+        				if (!text_display.getChildren().contains(paused_label)) {
+        					text_display.getChildren().add(paused_label);
+
+        				}
+        				
+        				if (!rink.getChildren().contains(text_display)) {
+        					rink.getChildren().add(text_display);
+
+        				}
         			}
         			
         			else {
-        				rink.hidePausedLabel();
+        				text_display.getChildren().clear();
+        				rink.getChildren().remove(layout);
+        				
+        				if (layout.getChildren().contains(text_display)) {
+        					layout.getChildren().remove(text_display);
+        					rink.getChildren().remove(layout);
         				}
         				
         				goal_data = updateGame();
@@ -132,27 +147,29 @@ public class Main extends Application {
 	        				Main.game_state = state.OVER;
 	        				
 							if (table.getPlayerOne().getScore() == table.getPlayerOne().SCORE_TO_WIN) {
-								rink.winnerLabel();
+								p1.setText("Game Over\n" + table.getPlayerOne().getName() + "\nWon!");
+								winner = p1;
 							}
 							
 							else {
-								rink.winnerLabel();
+								p2.setText("Game Over\n" + table.getPlayerTwo().getName() + "\nWon!");
+								winner = p2;
 							}
 							
-//							p1_score.setText(table.getPlayerOne().getScore() + "");
-//							p2_score.setText(table.getPlayerTwo().getScore() + "");
-//							
-//							text_display.setSpacing(table.HEIGHT / 10);
-//							text_display.getChildren().addAll(p1_score, winner, p2_score);
-//							layout.getChildren().add(text_display);
+							p1_score.setText(table.getPlayerOne().getScore() + "");
+							p2_score.setText(table.getPlayerTwo().getScore() + "");
+							
+							text_display.setSpacing(table.HEIGHT / 10);
+							text_display.getChildren().addAll(p1_score, winner, p2_score);
+							layout.getChildren().add(text_display);
 							
 							PauseTransition pause = new PauseTransition(Duration.seconds(5));
-	        				pause.setOnFinished(e -> Rink.playAgainButton());
+	        				pause.setOnFinished(e -> playAgain());
 	        				pause.play();
 	        			}
 	        			
 	        			else if (goal) {
-	        				rink.displayScore(goal_data.get(0), goal_data.get(1));
+	        				displayScore(goal_data.get(0), goal_data.get(1));
 	        				PauseTransition pause = new PauseTransition(Duration.seconds(2));
 	        				pause.setOnFinished(e -> timeline.play());
 	        				timeline.pause();
@@ -161,13 +178,14 @@ public class Main extends Application {
         			}
 				}
 				
-//				else if (new_game)  {
-//						reset();
-//						new_game = false;
-//						primaryStage.setScene(new Scene(menu));
-//					}
-//				}
-	        
+				else {
+					if (new_game) {
+						reset();
+						new_game = false;
+						primaryStage.setScene(new Scene(menu));
+					}
+				}
+	        }
 		}));
 				
 		
@@ -193,7 +211,7 @@ public class Main extends Application {
 	}
 	
 	
-	public static void createTable() {
+	public void createTable() {
 		String player_one_name = "";
 		String player_two_name = "";
 		
@@ -223,117 +241,123 @@ public class Main extends Application {
 		return goal_data;
 	}
 	
+	
 
 	
-//	public void createLabels() {
-//		int font_size = 60;
-//		Font f = new Font(Font.getDefault().getStyle(), font_size);
-//		
-//		p1_score.setText(Integer.toString(table.getPlayerOne().getScore()));
-//		p1_score.setTextFill(table.getPlayerOne().getColour());
-//		p1_score.setAlignment(Pos.CENTER);
-//		p1_score.setTextAlignment(TextAlignment.CENTER);
-//		p1_score.setEffect(table.getPlayerOne().getBorderGlow());
-//
-//		p2_score.setText(Integer.toString(table.getPlayerTwo().getScore()));
-//		p2_score.setTextAlignment(TextAlignment.CENTER);
-//		p2_score.setAlignment(Pos.CENTER);
-//		p2_score.setTextFill(table.getPlayerTwo().getColour());
-//		p2_score.setEffect(table.getPlayerTwo().getBorderGlow());
-//		
-//		for (String font_name: Font.getFontNames()) {
-//			if (font_name.equals("Bauhaus 93")) {
-//				f = new Font(font_name, font_size * 1.3);
-//			}
-//		}
-//		
-//		p1_score.setFont(f);
-//		p2_score.setFont(f);
-//		
-//		paused_label.setText("Paused");
-//		paused_label.setFont(getFont());
-//		paused_label.setAlignment(Pos.CENTER);
-//		paused_label.setTextAlignment(TextAlignment.CENTER);
-//		paused_label.setTextFill(Color.CHARTREUSE);
-//		paused_label.setEffect(green_border_glow);
-//		
-//		game_over_label.setText("Game Over");
-//		game_over_label.setFont(getFont());
-//		game_over_label.setTextFill(Color.CHARTREUSE);
-//		game_over_label.setEffect(green_border_glow);
-//		
-//		winner.setFont(getFont());
-//		winner.setTextFill(Color.CHARTREUSE);
-//		winner.setAlignment(Pos.CENTER);
-//		winner.setTextAlignment(TextAlignment.CENTER);
-//		winner.setEffect(green_border_glow);
-//		
-//		p1.setText(table.getPlayerOne().getName() + "\nScored!");
-//		p1.setFont(getFont());
-//		p1.setAlignment(Pos.CENTER);
-//		p1.setTextAlignment(TextAlignment.CENTER);
-//		p1.setTextFill(Color.CHARTREUSE);
-//		p1.setEffect(green_border_glow);
-//		p1.setPrefSize(table.WIDTH, table.HEIGHT / 2);
-//		
-//		p2.setText(table.getPlayerTwo().getName() + "\nScored!");
-//		p2.setFont(getFont());
-//		p2.setAlignment(Pos.CENTER);
-//		p2.setTextAlignment(TextAlignment.CENTER);
-//		p2.setTextFill(Color.CHARTREUSE);
-//		p2.setEffect(green_border_glow);
-//		p2.setPrefSize(table.WIDTH,  table.HEIGHT / 2);
-//		
-//		text_display.setPrefSize(table.WIDTH,  table.HEIGHT);
-//		text_display.setAlignment(Pos.CENTER);
-//		text_display.setLayoutX(0);
-//		text_display.setLayoutY(0);
-//		text_display.setSpacing(table.HEIGHT / 10);
-//		
-//		play_again.setText("New Game?");
-//		play_again.setTextFill(Color.CHARTREUSE);
-//		play_again.setFont(getFont());
-//		play_again.setPrefSize(table.WIDTH - 20,  table.HEIGHT / 3);
-//		play_again.setAlignment(Pos.CENTER);
-//		play_again.setTextAlignment(TextAlignment.CENTER);
-//	}
-//	
-//	public void displayScore(boolean p1_goal, boolean p2_goal) {	
-//		p1_score.setText(Integer.toString(table.getPlayerOne().getScore()));
-//		p2_score.setText(Integer.toString(table.getPlayerTwo().getScore()));
-//		
-//		if (p1_goal) {
-//			text_display.getChildren().addAll(p1_score, p1, p2_score);
-//		}
-//		
-//		else if (p2_goal) {
-//			text_display.getChildren().addAll(p1_score, p2, p2_score);
-//		}
-//		
-//		else {
-//			text_display.getChildren().addAll(p1_score, p2_score);
-//		}
-//		
-//		layout.getChildren().add(text_display);
-//	}
-//	
-//	public void removeScore() {
-//		text_display.getChildren().clear();
-//		
-//		if (layout.getChildren().contains(text_display)) {
-//			layout.getChildren().remove(text_display);
-//		}
-//	}	
+	public void createLabels() {
+		int font_size = 60;
+		Font f = new Font(Font.getDefault().getStyle(), font_size);
+		
+		p1_score.setText(Integer.toString(table.getPlayerOne().getScore()));
+		p1_score.setTextFill(table.getPlayerOne().getColour());
+		p1_score.setAlignment(Pos.CENTER);
+		p1_score.setTextAlignment(TextAlignment.CENTER);
+		p1_score.setEffect(table.getPlayerOne().getBorderGlow());
+
+		p2_score.setText(Integer.toString(table.getPlayerTwo().getScore()));
+		p2_score.setTextAlignment(TextAlignment.CENTER);
+		p2_score.setAlignment(Pos.CENTER);
+		p2_score.setTextFill(table.getPlayerTwo().getColour());
+		p2_score.setEffect(table.getPlayerTwo().getBorderGlow());
+		
+		for (String font_name: Font.getFontNames()) {
+			if (font_name.equals("Bauhaus 93")) {
+				f = new Font(font_name, font_size * 1.3);
+			}
+		}
+		
+		p1_score.setFont(f);
+		p2_score.setFont(f);
+		
+		paused_label.setText("Paused");
+		paused_label.setFont(getFont());
+		paused_label.setAlignment(Pos.CENTER);
+		paused_label.setTextAlignment(TextAlignment.CENTER);
+		paused_label.setTextFill(Color.CHARTREUSE);
+		paused_label.setEffect(green_border_glow);
+		
+		game_over_label.setText("Game Over");
+		game_over_label.setFont(getFont());
+		game_over_label.setTextFill(Color.CHARTREUSE);
+		game_over_label.setEffect(green_border_glow);
+		
+		winner.setFont(getFont());
+		winner.setTextFill(Color.CHARTREUSE);
+		winner.setAlignment(Pos.CENTER);
+		winner.setTextAlignment(TextAlignment.CENTER);
+		winner.setEffect(green_border_glow);
+		
+		p1.setText(table.getPlayerOne().getName() + "\nScored!");
+		p1.setFont(getFont());
+		p1.setAlignment(Pos.CENTER);
+		p1.setTextAlignment(TextAlignment.CENTER);
+		p1.setTextFill(Color.CHARTREUSE);
+		p1.setEffect(green_border_glow);
+		p1.setPrefSize(table.WIDTH, table.HEIGHT / 2);
+		
+		p2.setText(table.getPlayerTwo().getName() + "\nScored!");
+		p2.setFont(getFont());
+		p2.setAlignment(Pos.CENTER);
+		p2.setTextAlignment(TextAlignment.CENTER);
+		p2.setTextFill(Color.CHARTREUSE);
+		p2.setEffect(green_border_glow);
+		p2.setPrefSize(table.WIDTH,  table.HEIGHT / 2);
+		
+		text_display.setPrefSize(table.WIDTH,  table.HEIGHT);
+		text_display.setAlignment(Pos.CENTER);
+		text_display.setLayoutX(0);
+		text_display.setLayoutY(0);
+		text_display.setSpacing(table.HEIGHT / 10);
+		
+		play_again.setText("New Game?");
+		play_again.setTextFill(Color.CHARTREUSE);
+		play_again.setFont(getFont());
+		play_again.setPrefSize(table.WIDTH - 20,  table.HEIGHT / 3);
+		play_again.setAlignment(Pos.CENTER);
+		play_again.setTextAlignment(TextAlignment.CENTER);
+	}
 	
-	public static Font getFont() {
+	public void displayScore(boolean p1_goal, boolean p2_goal) {	
+		p1_score.setText(Integer.toString(table.getPlayerOne().getScore()));
+		p2_score.setText(Integer.toString(table.getPlayerTwo().getScore()));
+		
+		if (p1_goal) {
+			text_display.getChildren().addAll(p1_score, p1, p2_score);
+			rink.getChildren().add(text_display);
+		}
+		
+		else if (p2_goal) {
+			text_display.getChildren().addAll(p1_score, p2, p2_score);
+			rink.getChildren().add(text_display);
+		}
+		
+		else {
+			text_display.getChildren().addAll(p1_score, p2_score);
+			rink.getChildren().add(text_display);
+		}
+		
+		layout.getChildren().add(text_display);
+		rink.getChildren().add(text_display);
+	}
+	
+	public void removeScore() {
+		text_display.getChildren().clear();
+		
+		if (rink.getChildren().contains(text_display)) {
+			rink.getChildren().remove(text_display);
+			
+		}
+	}	
+	
+	public Font getFont() {
 		int font_size = 60;
 		Font font = new Font(Font.getDefault().getStyle(), font_size);
 		
 		for (String f: Font.getFontNames()) {
 			if (f.equals("Bauhaus 93")) {
 				font = new Font(f, font_size * 1.3);
-				Rink.p1_score.setLayoutX(Rink.p1_score.getLayoutX() - 5);
-				Rink.p2_score.setLayoutX(Rink.p2_score.getLayoutX() - 5);
+				p1_score.setLayoutX(p1_score.getLayoutX() - 5);
+				p2_score.setLayoutX(p2_score.getLayoutX() - 5);
 			}
 		}
 		
@@ -342,37 +366,39 @@ public class Main extends Application {
 		return font;
 	}
 	
-//	public void playAgain() {
-//		timeline.pause();
-//		play_again.setOnAction(new EventHandler<ActionEvent>() {
-//			@Override
-//			public void handle(ActionEvent e) {
-//				new_game = true;
-//				timeline.play();
-//			}
-//		});
-//		text_display.getChildren().clear();
-//		text_display.getChildren().add(play_again);
-//		
-//		if (!layout.getChildren().contains(text_display)) {
-//			layout.getChildren().add(text_display);
-//		}
-//	}
+	public void playAgain() {
+		timeline.pause();
+		play_again.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				new_game = true;
+				timeline.play();
+			}
+		});
+		text_display.getChildren().clear();
+		text_display.getChildren().add(play_again);
+		rink.getChildren().add(layout);		
+		if (!layout.getChildren().contains(text_display)) {
+			layout.getChildren().add(text_display);
+			rink.getChildren().add(layout);
+		}
+	}
 	
-//	public void reset() {
-//		text_display.getChildren().clear();
-//		layout = new Pane();
-//		layout.setPrefSize(600, 800);
-//		layout.setStyle("-fx-background-color: BLACK;");
-//		rink.runRink();
-//		menu = new Menu();
-//		menu.runMenu();
-//		createTable();
-//		createLabels();
-//		layout.getChildren().addAll(table.getPuck(), table.getPlayerOne(), table.getPlayerTwo(), table.getPlayerOne().getCenterCircle(), table.getPlayerTwo().getCenterCircle());
-//		scene = new Scene(layout);
-//		Controller.setControls();
-//		Main.game_state = state.MENU;
-//		menu_finished = false;
-//	}
+	public void reset() {
+		text_display.getChildren().clear();
+		layout = new Pane();
+		layout.setPrefSize(600, 800);
+		layout.setStyle("-fx-background-color: BLACK;");
+		rink.runRink();
+		menu = new Menu();
+		menu.runMenu();
+		createTable();
+		createLabels();
+		layout.getChildren().addAll(table.getPuck(), table.getPlayerOne(), table.getPlayerTwo(), table.getPlayerOne().getCenterCircle(), table.getPlayerTwo().getCenterCircle());
+		rink.getChildren().add(layout);
+		scene = new Scene(layout);
+		Controller.setControls();
+		Main.game_state = state.MENU;
+		menu_finished = false;
+	}
 }
