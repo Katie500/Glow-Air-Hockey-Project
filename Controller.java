@@ -3,7 +3,15 @@ package application;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Controller.
+ */
 public class Controller extends Main {
+	
+	/**
+	 * Controller one.
+	 */
 	public static void controllerOne() {
 		double vx = table.getPlayerOne().getVelocityX();
 		double vy = table.getPlayerOne().getVelocityY();
@@ -29,6 +37,9 @@ public class Controller extends Main {
 		table.getPlayerOne().setVelocityY(vy);
 	}
 	
+	/**
+	 * Controller two.
+	 */
 	public static void controllerTwo() {
 		double vx = table.getPlayerTwo().getVelocityX();
 		double vy = table.getPlayerTwo().getVelocityY();
@@ -54,6 +65,9 @@ public class Controller extends Main {
 		table.getPlayerTwo().setVelocityY(vy);
 	}
 
+	/**
+	 * Sets the controls.
+	 */
 	public static void setControls() {
 	    getRink_screen().setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override

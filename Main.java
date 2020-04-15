@@ -1,7 +1,6 @@
 package application;
 
 import java.util.ArrayList;
-
 import gui.GameScreen;
 import gui.Menu;
 import gui.Rink;
@@ -33,47 +32,116 @@ import javafx.util.Duration;
 
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Main.
+ */
 //setting the main class as an extension of the Application class
 public class Main extends Application {
+	
+	/** The table. */
 	protected static Table table;
+	
+	/** The d. */
 	protected static boolean up, down, left, right, w, a, s, d;
+	
+	/** The font. */
 	protected static Font font;
+	
+	/** The menu finished. */
 	public static boolean menu_finished = false;         // Necessary to access from gui package
 	
+	/** The menu. */
 	private Menu menu = new Menu();
+	
+	/** The rink. */
 	private Rink rink = new Rink();
+	
+	/** The timeline. */
 	private Timeline timeline;
+	
+	/** The layout. */
 	private Pane layout = new Pane();
+	
+	/** The p 1 score. */
 	private Label p1_score = new Label();
+	
+	/** The p 2 score. */
 	private Label p2_score = new Label();
+	
+	/** The p 1. */
 	private Label p1 = new Label();
+	
+	/** The p 2. */
 	private Label p2 = new Label();
+	
+	/** The paused. */
 	protected static boolean paused = false;
+	
+	/** The paused label. */
 	private Label paused_label = new Label();
+	
+	/** The game over label. */
 	private Label game_over_label = new Label();
+	
+	/** The winner. */
 	private Label winner = new Label();
+	
+	/** The scene. */
 	protected static Scene scene;
+	
+	/** The menu screen. */
 	private Scene menu_screen;
+	
+	/** The rink screen. */
 	private static Scene rink_screen;
+	
+	/** The text display. */
 	private VBox text_display = new VBox();
+	
+	/** The play again. */
 	private Button play_again = new Button();
+	
+	/** The new game. */
 	private boolean new_game = false;
 	
+	/** The Constant DELAY. */
 	final static int DELAY = 10;
+	
+	/** The Constant BASE_VELOCITY. */
 	final static int BASE_VELOCITY = 30;
 	
+	/**
+	 * The Enum state.
+	 */
 	public static enum state{
-	    MENU,
-	    GAME,
-	    OVER
+	    
+    	/** The menu. */
+    	MENU,
+	    
+    	/** The game. */
+    	GAME,
+	    
+    	/** The over. */
+    	OVER
 	}
+	
+	/** The game state. */
 	//setting the first game state to menu
 	public static state game_state = state.MENU;
 	
+	/**
+	 * The main method.
+	 *
+	 * @param args the arguments
+	 */
 	public static void main(String [] args) {  
 		launch(args);
 	}
 	
+	/* (non-Javadoc)
+	 * @see javafx.application.Application#start(javafx.stage.Stage)
+	 */
 	//setting up the stage
 	@Override
 	public void start(Stage primaryStage) {
@@ -219,6 +287,9 @@ public class Main extends Application {
 		primaryStage.show();
 	}
 	
+	/**
+	 * Creates the table.
+	 */
 	//creating the table for the game
 	public void createTable() {
 		String player_one_name = "";
@@ -237,6 +308,11 @@ public class Main extends Application {
 		table.getPlayerTwo().setColour(table.getPlayerTwo().getColour());
 	}
 	
+	/**
+	 * Update game.
+	 *
+	 * @return the array list
+	 */
 	// This function updates what is necessary with each tick in the timeline.
 	public ArrayList<Boolean> updateGame() {                    
 		table.applyFriction(DELAY);
@@ -252,6 +328,9 @@ public class Main extends Application {
 	
 	
 
+	/**
+	 * Creates the labels.
+	 */
 	//creating elements for score, game over and play again button.
 	public void createLabels() {
 		int font_size = 60;
@@ -333,6 +412,12 @@ public class Main extends Application {
 		play_again.setTextAlignment(TextAlignment.CENTER);
 	}
 	
+	/**
+	 * Display score.
+	 *
+	 * @param p1_goal the p 1 goal
+	 * @param p2_goal the p 2 goal
+	 */
 	//method to display the score
 	public void displayScore(boolean p1_goal, boolean p2_goal) {	
 		p1_score.setText(Integer.toString(table.getPlayerOne().getScore()));
@@ -358,6 +443,9 @@ public class Main extends Application {
 		rink.getChildren().add(text_display);
 	}
 	
+	/**
+	 * Removes the score.
+	 */
 	//clearing the score from the the display
 	public void removeScore() {
 		text_display.getChildren().clear();
@@ -368,6 +456,11 @@ public class Main extends Application {
 		}
 	}	
 	
+	/**
+	 * Gets the font.
+	 *
+	 * @return the font
+	 */
 	public Font getFont() {
 		int font_size = 60;
 		Font font = new Font(Font.getDefault().getStyle(), font_size);
@@ -385,6 +478,9 @@ public class Main extends Application {
 		return font;
 	}
 	
+	/**
+	 * Play again.
+	 */
 	//building button displayed after game over to play again. 
 	public void playAgain() {
 		timeline.pause();
@@ -407,10 +503,20 @@ public class Main extends Application {
 		}
 	}
 
+    /**
+     * Gets the rink screen.
+     *
+     * @return the rink screen
+     */
     public static Scene getRink_screen() {
         return rink_screen;
     }
 
+    /**
+     * Sets the rink screen.
+     *
+     * @param rink_screen the new rink screen
+     */
     public static void setRink_screen(Scene rink_screen) {
         Main.rink_screen = rink_screen;
     }
