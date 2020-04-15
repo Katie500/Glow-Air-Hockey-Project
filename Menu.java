@@ -1,6 +1,7 @@
 package gui;
 
 import javafx.scene.layout.HBox;
+
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -18,34 +19,80 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Menu.
+ */
 public class Menu extends GameScreen{
+	
+	/** The play. */
 	//instantiating elements of the gui
     private static Button play = new Button();
+	
+	/** The controls. */
 	private static Button controls = new Button();
+	
+	/** The display box. */
 	private static Button display_box = new Button();
+	
+	/** The input. */
 	private static Button input = new Button();
+	
+	/** The info. */
 	private static Label info = new Label();
+	
+	/** The play requirements. */
 	private static Label play_requirements = new Label();
+	
+	/** The input box. */
 	private static VBox input_box = new VBox();
+	
+	/** The p 1 input box. */
 	private static HBox p1_input_box = new HBox();
+	
+	/** The p 2 input box. */
 	private static HBox p2_input_box = new HBox();
+	
+	/** The p 1 name. */
 	private static TextField p1_name = new TextField();
+	
+	/** The p 1 colour. */
 	private static TextField p1_colour = new TextField();
+	
+	/** The p 2 name. */
 	private static TextField p2_name = new TextField();
+	
+	/** The p 2 colour. */
 	private static TextField p2_colour = new TextField();
+	
+	/** The player one name. */
 	private static String player_one_name = "";
+	
+	/** The player two name. */
 	private static String player_two_name = "";
+	
+	/** The player one colour. */
 	private static Color player_one_colour;
+	
+	/** The player two colour. */
 	private static Color player_two_colour;
+	
+	/** The font. */
 	private static Font font = new Font("bauhaus 93", 45);
 	
 
+	/**
+	 * Instantiates a new menu.
+	 */
 	//basic constructor for menu screen
 	public Menu() {
 		setPrefSize(WIDTH, HEIGHT);
 		setStyle("-fx-background-color: BLACK;");
 	}
 	
+	/**
+	 * Run menu.
+	 */
 	//method to build the menu gui
 	public void runMenu() {
 		getChildren().clear();
@@ -54,6 +101,9 @@ public class Menu extends GameScreen{
 		getChildren().addAll(play, controls, display_box, input, input_box);
 	}
 	
+	/* (non-Javadoc)
+	 * @see gui.GameScreen#setScreen()
+	 */
 	//overriding abstract method to build all elements of the menu screen
 	@Override
 	public void setScreen() {
@@ -135,6 +185,9 @@ public class Menu extends GameScreen{
 		input_box.setAlignment(Pos.CENTER);
 	}
 	
+	/**
+	 * Sets the buttons.
+	 */
 	//This method handles events when a button is pushed
 	public void setButtons() {
 		controls.setOnAction(new EventHandler<ActionEvent>() {
@@ -152,6 +205,9 @@ public class Menu extends GameScreen{
 		});
 	}
 	
+	/**
+	 * Display controls.
+	 */
 	//If the user hits the displayControls button text will show up to inform the user how to play the game
 	public void displayControls() {
 		if (getChildren().contains(info)) {
@@ -173,6 +229,9 @@ public class Menu extends GameScreen{
 		}
 	}
 	
+	/**
+	 * Play.
+	 */
 	//helper method for inputIsValid. If the input is valid it will change Main.menu_finished to true which will commence the game. 
 	public void play() {
 		if (inputIsValid()) {
@@ -194,6 +253,11 @@ public class Menu extends GameScreen{
 		}
 	}
 	
+	/**
+	 * Input is valid.
+	 *
+	 * @return true, if successful
+	 */
 	//method to determine whether the users input to the method is valid. If not the method will display an error and highlight the information that needs to be altered.
 	public boolean inputIsValid() {
 		boolean valid = true;
@@ -243,27 +307,57 @@ public class Menu extends GameScreen{
 		return valid;
 	}
 	
+	/**
+	 * Gets the player one name.
+	 *
+	 * @return the player one name
+	 */
 	//getters and setter for font, player names and colours to access from other classes/packages.
 	public String getPlayerOneName() {
 		return player_one_name;
 	}
 	
+	/**
+	 * Gets the player two name.
+	 *
+	 * @return the player two name
+	 */
 	public String getPlayerTwoName() {
 		return player_two_name;
 	}
 	
+	/**
+	 * Gets the player one colour.
+	 *
+	 * @return the player one colour
+	 */
 	public Color getPlayerOneColour() {
 		return player_one_colour;
 	}
 	
+	/**
+	 * Gets the player two colour.
+	 *
+	 * @return the player two colour
+	 */
 	public Color getPlayerTwoColour() {
 		return player_two_colour;
 	}
 
+    /**
+     * Gets the font.
+     *
+     * @return the font
+     */
     public static Font getFont() {
         return font;
     }
 
+    /**
+     * Sets the font.
+     *
+     * @param font the new font
+     */
     public static void setFont(Font font) {
         Menu.font = font;
     }

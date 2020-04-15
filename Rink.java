@@ -5,30 +5,60 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Rink.
+ */
 public class Rink extends GameScreen{
 
+    /** The center circle. */
     //instantiating elements required to build the rink
     private static Circle center_circle = new Circle();
+    
+    /** The center circle cover. */
     private static Circle center_circle_cover = new Circle();
+    
+    /** The center. */
     private static Circle center = new Circle();
+    
+    /** The left border. */
     private static Rectangle left_border = new Rectangle();
+    
+    /** The right border. */
     private static Rectangle right_border = new Rectangle();
+    
+    /** The top border. */
     private static Rectangle top_border = new Rectangle();
+    
+    /** The bottom border. */
     private static Rectangle bottom_border = new Rectangle();
+    
+    /** The center line. */
     private static Rectangle center_line = new Rectangle();
+    
+    /** The player one goal. */
     private static Rectangle player_one_goal = new Rectangle();
+    
+    /** The player two goal. */
     private static Rectangle player_two_goal = new Rectangle();
     
     
     
+    /** The layout. */
     public static Pane layout = new Pane();
     
+    /**
+     * Instantiates a new rink.
+     */
     //constructor to set basic elements of the rink
     public Rink() {
         setPrefSize(WIDTH, HEIGHT);
         setStyle("-fx-background-color: BLACK;");
     }
     
+    /**
+     * Run rink.
+     */
     //method that can be called to build the rink.
     public void runRink() {
         getChildren().clear();
@@ -37,6 +67,9 @@ public class Rink extends GameScreen{
         
     }
     
+    /* (non-Javadoc)
+     * @see gui.GameScreen#setScreen()
+     */
     //Overriding abstract method to build all the GUI elements of the hockey rink.
     @Override
     public void setScreen() {
